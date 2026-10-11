@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWise | Consumption Forecast</title>
+    <link rel="stylesheet" href="/static/css.css">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+        .predict-hero {
+            padding: 32px;
+            margin: 28px 0;
+            border-radius: 25px;
+            color: white;
+            background: linear-gradient(120deg, #06334b, #087f91, #16b8a8);
+        }
+
+        .predict-hero h1 {
+            margin: 12px 0;
+            font-size: clamp(30px, 4vw, 43px);
+        }
+
+        .predict-hero p {
+            max-width: 700px;
+            color: #d7f4f4;
+            line-height: 1.8;
+        }
+
+        .predict-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .predict-panel {
+            padding: 28px;
+            border: 1px solid #dceff0;
+            border-radius: 22px;
+            background: white;
+            box-shadow: 0 12px 35px #073e4b0b;
+        }
+
+        .predict-panel h2 {
+            color: #16465a;
+            margin-top: 0;
+        }
+
+        .predict-panel > p {
+            color: #758b95;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 17px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            color: #31596a;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .field input {
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 46px;
+            padding: 12px;
+            border: 1px solid #d5e6e9;
+            border-radius: 11px;
+            background: #faffff;
+            color: #17465a;
+            font: inherit;
+        }
+
+        .field input:focus {
+            outline: 2px solid #6ed9ce;
+            border-color: #0caaa5;
+        }
+
+        .field small {
+            color: #81949c;
+            font-size: 11px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(100deg, #087f91, #10b9a6);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            filter: brightness(1.06);
+        }
+
+        .result-card {
+            margin-top: 20px;
+            padding: 22px;
+            border: 1px solid #bfece1;
+            border-radius: 17px;
+            background: linear-gradient(135deg, #e9fcf5, #eefbff);
+        }
+
+        .result-label {
+            color: #47746f;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .result-number {
+            margin: 10px 0;
+            color: #087f79;
+            font-size: 35px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .result-card p {
+            color: #53766f;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .chart-panel {
+            margin-top: 22px;
+            padding: 25px;
+            border: 1px solid #dceff0;
+            border-radius: 22px;
+            background: white;
+        }
+
+        #forecast-chart {
+            width: 100%;
+            min-height: 280px;
+        }
+
+        .notice {
+            margin: 20px 0;
+            padding: 16px;
+            border-radius: 12px;
+            background: #f0f8fc;
+            color: #416473;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .error-message {
+            margin-top: 18px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #fff0ef;
+            color: #a52d2d;
+            font-size: 14px;
+        }
+
+        @media (max-width: 850px) {
+            .predict-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .field-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .predict-panel,
+            .predict-hero {
+                padding: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar">
+    <div class="container nav-inner">
+        <a href="/" class="brand">
+            <span class="brand-icon">≈</span>
+            <span>Water<span style="color:#16c9bd">Wise</span></span>
+        </a>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/predict" aria-current="page">Forecast</a>
+            <a href="/performance">Performance</a>
+            <a href="/about">About</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <section class="predict-hero">
+        <span class="eyebrow" style="color:#a9fff0">
+            PREDICTIVE WATER ANALYTICS
+        </span>
+
+        <h1>Water Consumption Forecast</h1>
+
+        <p>
+            Enter the date, time, and environmental conditions to estimate
+            water consumption using your trained Random Forest model.
+            The prediction depends on the model's training data and
+            available features.
+        </p>
+    </section>
+
+    <div class="predict-layout">
+        <section class="predict-panel">
+            <h2>Enter Forecast Details</h2>
+            <p>
+                Complete the fields below using values appropriate for
+                your dataset and the model's expected input format.
+            </p>
+
+            <form id="prediction-form" action="/predict" method="post">
+                <div class="field-grid">
+                    <div class="field full">
+                        <label for="date">Forecast Date</label>
+                        <input
+                            type="date"
+                            id="date"
+                            name="date"
+                            required
+                        >
+                    </div>
+
+                    <div class="field full">
+                        <label for="time">Forecast Time</label>
+                        <input
+                            type="time"
+                            id="time"
+                            name="time"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="temperature">Temperature</label>
+                        <input
+                            type="number"
+                            id="temperature"
+                            name="temperature"
+                            step="any"
+                            placeholder="e.g. 28"
+                            required
+                        >
+                        <small>Use the dataset's temperature unit.</small>
+                    </div>
+
+                    <div class="field">
+                        <label for="rain">Rain</label>
+                        <input
+                            type="number"
+                            id="rain"
+                            name="rain"
+                            step="any"
+                            min="0"
+                            placeholder="e.g. 0"
+                            required
+                        >
+                        <small>Use the dataset's rain format.</small>
+                    </div>
+
+                    <div class="field full">
+                        <label for="sun">Sun</label>
+                        <input
+                            type="number"
+                            id="sun"
+                            name="sun"
+                            step="any"
+                            min="0"
+                            placeholder="e.g. 6"
+                            required
+                        >
+                        <small>Use the dataset's sunlight format.</small>
+                    </div>
+                </div>
+
+                <button class="submit-btn" type="submit">
+                    Generate Consumption Prediction →
+                </button>
+            </form>
+
+            {% if error %}
+            <div class="error-message" role="alert">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            {% if prediction is defined and prediction is not none %}
+            <div class="result-card" aria-live="polite">
+                <div class="result-label">PREDICTED CONSUMPTION</div>
+
+                <div class="result-number">
+                    {{ "%.3f"|format(prediction|float) }}
+                </div>
+
+                <p>
+                    This is the model's estimated consumption for the
+                    selected date and time. Interpret the value using
+                    the units of your original dataset.
+                </p>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="predict-panel">
+            <span class="eyebrow">FORECAST OVERVIEW</span>
+            <h2>Upcoming Consumption</h2>
+
+            <p>
+                This chart loads the next 24 hourly predictions from your
+                application's forecast API.
+            </p>
+
+            <div id="forecast-chart"></div>
+
+            <div class="notice">
+                <strong>Important:</strong> This project dataset contains
+                Date, Time, Consumption, Temperature, Rain, and Sun.
+                It does not identify a city or state, so these predictions
+                should not be interpreted as location-specific forecasts.
+            </div>
+
+            <a href="/dashboard" class="btn-secondary"
+               style="display:inline-block;text-decoration:none">
+                View Full Dashboard →
+            </a>
+        </section>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>WaterWise · Water Consumption and Usage Forecasting</p>
+    </div>
+</footer>
+
+<script>
+    const dateInput = document.getElementById("date");
+    const timeInput = document.getElementById("time");
+
+    // Use the current local date and time as convenient initial values.
+    const now = new Date();
+
+    const localDate = [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0")
+    ].join("-");
+
+    const localTime = [
+        String(now.getHours()).padStart(2, "0"),
+        String(now.getMinutes()).padStart(2, "0")
+    ].join(":");
+
+    dateInput.value = localDate;
+    timeInput.value = localTime;
+
+    async function loadForecastChart() {
+        const chart = document.getElementById("forecast-chart");
+
+        try {
+            const response = await fetch("/api/forecast?hours=24");
+
+            if (!response.ok) {
+                throw new Error("Forecast API returned an error.");
+            }
+
+            const data = await response.json();
+
+            if (!Array.isArray(data.forecast) || data.forecast.length === 0) {
+                chart.innerHTML =
+                    "<p>No forecast data is currently available.</p>";
+                return;
+            }
+
+            const dates = data.forecast.map(
+                item => item.DateTime ?? item.datetime ?? item.date
+            );
+
+            const values = data.forecast.map(
+                item => Number(
+                    item.PredictedConsumption ??
+                    item.predicted_consumption ??
+                    item.prediction
+                )
+            );
+
+            if (values.some(value => !Number.isFinite(value))) {
+                throw new Error("The forecast response contains invalid values.");
+            }
+
+            Plotly.newPlot(
+                chart,
+                [{
+                    x: dates,
+                    y: values,
+                    type: "scatter",
+                    mode: "lines+markers",
+                    name: "Predicted Consumption",
+                    line: {
+                        color: "#0ba99e",
+                        width: 3,
+                        shape: "spline"
+                    },
+                    marker: {
+                        size: 6,
+                        color: "#087f91"
+                    },
+                    fill: "tozeroy",
+                    fillcolor: "rgba(11,169,158,0.10)"
+                }],
+                {
+                    paper_bgcolor: "rgba(0,0,0,0)",
+                    plot_bgcolor: "rgba(0,0,0,0)",
+                    margin: { t: 20, r: 15, b: 65, l: 55 },
+                    xaxis: {
+                        title: "Date and Time",
+                        tickangle: -35,
+                        gridcolor: "#eaf1f3"
+                    },
+                    yaxis: {
+                        title: "Predicted Consumption",
+                        rangemode: "tozero",
+                        gridcolor: "#eaf1f3"
+                    },
+                    font: {
+                        family: "Arial, sans-serif",
+                        color: "#456574"
+                    },
+                    showlegend: false,
+                    autosize: true
+                },
+                {
+                    responsive: true,
+                    displaylogo: false
+                }
+            );
+        } catch (error) {
+            chart.innerHTML =
+                "<p>Unable to load the forecast chart. Please check that " +
+                "the application and forecast API are running.</p>";
+            console.error(error);
+        }
+    }
+
+    loadForecastChart();
+</script>
+<script src="/static/script.js"></script>
+</body>
+</html>

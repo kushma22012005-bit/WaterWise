@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWise | Login</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at 10% 15%, #27d8c522, transparent 30%),
+                radial-gradient(circle at 90% 85%, #67e8f922, transparent 30%),
+                linear-gradient(135deg, #041e32, #07566c, #078e94);
+            overflow-x: hidden;
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            border: 1px solid #ffffff22;
+            pointer-events: none;
+            animation: float 9s ease-in-out infinite;
+        }
+
+        .orb.one {
+            width: 230px;
+            height: 230px;
+            top: 6%;
+            left: 5%;
+        }
+
+        .orb.two {
+            width: 145px;
+            height: 145px;
+            right: 7%;
+            bottom: 8%;
+            animation-delay: -4s;
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            padding: 38px;
+            border: 1px solid #ffffff75;
+            border-radius: 28px;
+            background: #ffffffee;
+            box-shadow: 0 30px 90px #001d3260;
+            backdrop-filter: blur(18px);
+            animation: appear .65s ease-out;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .drop {
+            display: inline-grid;
+            place-items: center;
+            width: 65px;
+            height: 65px;
+            margin-bottom: 10px;
+            border-radius: 22px 22px 22px 5px;
+            color: white;
+            font-size: 32px;
+            background: linear-gradient(140deg, #0db9ad, #08758f);
+            box-shadow: 0 12px 28px #0b9c9a40;
+            transform: rotate(-5deg);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 35px;
+            letter-spacing: -1.5px;
+            background: linear-gradient(90deg, #073b58, #078d96, #0bb9a7);
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: shimmer 5s linear infinite;
+        }
+
+        .brand h1 span { font-weight: 300; }
+
+        .brand p {
+            margin: 9px 0 0;
+            color: #78909a;
+            font-size: 13px;
+        }
+
+        h2 {
+            margin: 0 0 8px;
+            color: #10394e;
+            font-size: 25px;
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            color: #718590;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .field { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #264c5b;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #d9e7e9;
+            border-radius: 13px;
+            outline: none;
+            background: #f8fbfb;
+            color: #123b4e;
+            font-size: 14px;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input:focus {
+            border-color: #0ba9a3;
+            box-shadow: 0 0 0 4px #0ba9a315;
+        }
+
+        .password-wrap { position: relative; }
+
+        .password-wrap input { padding-right: 65px; }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            color: #078a91;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 2px 0 22px;
+            color: #6d828b;
+            font-size: 12px;
+        }
+
+        .remember input {
+            width: 15px;
+            height: 15px;
+            accent-color: #079e9b;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            border: 0;
+            border-radius: 13px;
+            color: white;
+            background: linear-gradient(110deg, #087a91, #08a99e);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 9px 22px #087f9130;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 13px 28px #087f9140;
+        }
+
+        .message {
+            margin-bottom: 17px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .error {
+            color: #9f3030;
+            background: #fff0f0;
+            border: 1px solid #ffd4d4;
+        }
+
+        .success {
+            color: #126c57;
+            background: #e9fbf4;
+            border: 1px solid #c9f0df;
+        }
+
+        .signup {
+            margin-top: 23px;
+            text-align: center;
+            color: #718590;
+            font-size: 13px;
+        }
+
+        .signup a {
+            color: #078b91;
+            font-weight: 750;
+            text-decoration: none;
+        }
+
+        .signup a:hover { text-decoration: underline; }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #81959c;
+            font-size: 11px;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-22px); }
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 27px 22px; }
+            .brand h1 { font-size: 31px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="login-card">
+        <header class="brand">
+            <div class="drop">≈</div>
+            <h1>Water<span>Wise</span></h1>
+            <p>Understand Water. Predict Tomorrow.</p>
+        </header>
+
+        <h2>Welcome back</h2>
+        <p class="subtitle">
+            Sign in to explore your water consumption insights.
+        </p>
+
+        {% if error %}
+        <div class="message error" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if registered %}
+        <div class="message success" role="status">
+            Your account is ready. Please sign in to continue.
+        </div>
+        {% endif %}
+
+        {% if logged_out %}
+        <div class="message success" role="status">
+            You have been logged out successfully. Welcome back whenever you're ready!
+        </div>
+        {% endif %}
+
+        <form action="/login" method="post" id="login-form">
+            <div class="field">
+                <label for="email">Email address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+
+                <div class="password-wrap">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        id="toggle-password"
+                    >Show</button>
+                </div>
+            </div>
+
+            <label class="remember">
+                <input type="checkbox" id="remember-email">
+                Remember email on this device
+            </label>
+
+            <button type="submit" class="login-button">
+                Sign In →
+            </button>
+        </form>
+
+        <div class="signup">
+            New to WaterWise?
+            <a href="/signup">Create an account</a>
+        </div>
+
+        <div class="footer">
+            WaterWise · Water Consumption and Usage Forecasting
+        </div>
+    </main>
+
+    <script>
+        const emailInput = document.getElementById("email");
+        const rememberCheckbox = document.getElementById("remember-email");
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("toggle-password");
+
+        // Remember only the email, never the password.
+        try {
+            const savedEmail = localStorage.getItem("waterwise_email");
+
+            if (savedEmail) {
+                emailInput.value = savedEmail;
+                rememberCheckbox.checked = true;
+            }
+        } catch (error) {
+            console.warn("Email remembering is unavailable.");
+        }
+
+        togglePassword.addEventListener("click", () => {
+            const isPassword = passwordInput.type === "password";
+
+            passwordInput.type = isPassword ? "text" : "password";
+            togglePassword.textContent = isPassword ? "Hide" : "Show";
+        });
+
+        document.getElementById("login-form").addEventListener("submit", () => {
+            try {
+                if (rememberCheckbox.checked) {
+                    localStorage.setItem("waterwise_email", emailInput.value.trim());
+                } else {
+                    localStorage.removeItem("waterwise_email");
+                }
+            } catch (error) {
+                console.warn("Could not save the email preference.");
+            }
+        });
+    </script>
+    <script src="/static/script.js"></script>
+</body>
+</html>

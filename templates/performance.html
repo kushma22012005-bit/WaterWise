@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWise | Model Performance</title>
+
+    <link rel="stylesheet" href="/static/css.css">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+        .performance-hero {
+            padding: 34px;
+            margin: 28px 0;
+            border-radius: 25px;
+            color: white;
+            background: linear-gradient(120deg, #06334b, #087f91, #16b8a8);
+        }
+
+        .performance-hero h1 {
+            margin: 12px 0;
+            font-size: clamp(30px, 4vw, 43px);
+        }
+
+        .performance-hero p {
+            max-width: 700px;
+            color: #d7f4f4;
+            line-height: 1.8;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .metric-card {
+            padding: 24px;
+            border: 1px solid #dceff0;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 10px 30px #073e4b0b;
+        }
+
+        .metric-card .metric-label {
+            color: #718995;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .metric-card .metric-value {
+            margin: 14px 0 8px;
+            color: #087f91;
+            font-size: clamp(25px, 3vw, 35px);
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .metric-card p {
+            margin-bottom: 0;
+            color: #7c9099;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 22px;
+            margin: 25px 0;
+        }
+
+        .performance-panel {
+            padding: 26px;
+            border: 1px solid #dceff0;
+            border-radius: 22px;
+            background: white;
+            box-shadow: 0 10px 30px #073e4b0b;
+        }
+
+        .performance-panel h2 {
+            margin-top: 0;
+            color: #16465a;
+        }
+
+        .performance-panel p {
+            color: #718995;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        #importance-chart {
+            width: 100%;
+            min-height: 300px;
+        }
+
+        .metric-explanation {
+            display: grid;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .explanation-item {
+            padding: 17px;
+            border-radius: 14px;
+            background: #f1faf9;
+            border: 1px solid #dcefeb;
+        }
+
+        .explanation-item h3 {
+            margin: 0 0 7px;
+            color: #176273;
+            font-size: 15px;
+        }
+
+        .explanation-item p {
+            margin: 0;
+            color: #718995;
+            font-size: 13px;
+        }
+
+        .notice {
+            margin: 24px 0;
+            padding: 18px;
+            border-radius: 14px;
+            background: #f0f8fc;
+            border: 1px solid #d7eaf0;
+            color: #416473;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .status-message {
+            padding: 18px;
+            border-radius: 14px;
+            background: #f7fafb;
+            color: #617b87;
+            line-height: 1.8;
+        }
+
+        .action-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0 35px;
+        }
+
+        .action-links a {
+            text-decoration: none;
+        }
+
+        @media (max-width: 850px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container nav-inner">
+        <a href="/" class="brand">
+            <span class="brand-icon">≈</span>
+            <span>Water<span style="color:#16c9bd">Wise</span></span>
+        </a>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/predict">Forecast</a>
+            <a href="/performance" aria-current="page">Performance</a>
+            <a href="/about">About</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="performance-hero">
+        <span class="eyebrow" style="color:#a9fff0">
+            MODEL EVALUATION
+        </span>
+
+        <h1>Understand Your Model's Performance</h1>
+
+        <p>
+            Evaluate how your Random Forest model estimates water
+            consumption using historical data. Review error metrics
+            and feature importance to better understand its results.
+        </p>
+    </section>
+
+    <section>
+        <span class="eyebrow">EVALUATION RESULTS</span>
+        <h2 style="color:#16465a">Model Metrics</h2>
+
+        <div class="metrics-grid">
+
+            <!-- MAE -->
+            <article class="metric-card">
+                <div class="metric-label">MAE</div>
+
+                <div class="metric-value">
+                    {% if mae is not none %}
+                        {{ "%.4f"|format(mae|float) }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+
+                <p>
+                    Mean Absolute Error: the average absolute difference
+                    between actual and predicted consumption.
+                </p>
+            </article>
+
+            <!-- RMSE -->
+            <article class="metric-card">
+                <div class="metric-label">RMSE</div>
+
+                <div class="metric-value">
+                    {% if rmse is not none %}
+                        {{ "%.4f"|format(rmse|float) }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+
+                <p>
+                    Root Mean Squared Error: gives greater weight
+                    to larger prediction errors.
+                </p>
+            </article>
+
+            <!-- R2 -->
+            <article class="metric-card">
+                <div class="metric-label">R² SCORE</div>
+
+                <div class="metric-value">
+                    {% if r2 is not none %}
+                        {{ "%.4f"|format(r2|float) }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+
+                <p>
+                    Indicates how much of the variation in the test
+                    target is explained by the model.
+                </p>
+            </article>
+
+        </div>
+    </section>
+
+    <div class="performance-grid">
+
+        <!-- Feature Importance -->
+        <section class="performance-panel">
+            <span class="eyebrow">MODEL INTERPRETATION</span>
+            <h2>Feature Importance</h2>
+
+            <p>
+                This chart uses feature-importance values from the
+                trained Random Forest model. Higher values indicate
+                greater contribution to the model's split-based
+                importance measure.
+            </p>
+
+            <div id="importance-chart"></div>
+
+            <div id="importance-status" class="status-message">
+                Loading feature importance...
+            </div>
+        </section>
+
+        <!-- Metric Guide -->
+        <section class="performance-panel">
+            <span class="eyebrow">METRIC GUIDE</span>
+            <h2>How to Read the Results</h2>
+
+            <div class="metric-explanation">
+
+                <div class="explanation-item">
+                    <h3>Mean Absolute Error (MAE)</h3>
+                    <p>
+                        Lower MAE generally means predictions are closer
+                        to the actual consumption values on average.
+                    </p>
+                </div>
+
+                <div class="explanation-item">
+                    <h3>Root Mean Squared Error (RMSE)</h3>
+                    <p>
+                        Lower RMSE generally indicates smaller prediction
+                        errors, with larger errors penalized more heavily.
+                    </p>
+                </div>
+
+                <div class="explanation-item">
+                    <h3>R² Score</h3>
+                    <p>
+                        A score closer to 1 indicates a stronger fit to
+                        the evaluation data. A negative score means the
+                        model performs worse than predicting the test-set
+                        mean under the standard R² definition.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <div class="notice">
+        <strong>Evaluation note:</strong>
+        These values come from the model's held-out test data.
+        The project uses a chronological train/test split to evaluate
+        performance on later records. Metric values alone do not
+        guarantee reliable future predictions.
+    </div>
+
+    <div class="action-links">
+        <a href="/dashboard" class="btn-primary">
+            View Dashboard →
+        </a>
+
+        <a href="/predict" class="btn-secondary">
+            Try a Prediction →
+        </a>
+    </div>
+
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>WaterWise · Water Consumption and Usage Forecasting</p>
+    </div>
+</footer>
+
+<script>
+async function loadFeatureImportance() {
+    const chart = document.getElementById("importance-chart");
+    const status = document.getElementById("importance-status");
+
+    try {
+        const response = await fetch("/api/performance");
+
+        if (!response.ok) {
+            throw new Error("Performance API returned an error.");
+        }
+
+        const data = await response.json();
+
+        let features = [];
+
+        if (Array.isArray(data.feature_importance)) {
+            features = data.feature_importance.map(item => ({
+                name: item.feature ?? item.name,
+                value: Number(item.importance ?? item.value)
+            }));
+        } else if (
+            data.feature_importance &&
+            typeof data.feature_importance === "object"
+        ) {
+            features = Object.entries(data.feature_importance).map(
+                ([name, value]) => ({
+                    name: name,
+                    value: Number(value)
+                })
+            );
+        }
+
+        features = features.filter(item =>
+            typeof item.name === "string" &&
+            Number.isFinite(item.value)
+        );
+
+        if (features.length === 0) {
+            chart.style.display = "none";
+            status.textContent =
+                "Feature importance is not available in the API response.";
+            return;
+        }
+
+        features.sort((a, b) => a.value - b.value);
+
+        if (typeof Plotly === "undefined") {
+            throw new Error("Plotly could not be loaded.");
+        }
+
+        status.style.display = "none";
+        chart.style.display = "block";
+
+        Plotly.newPlot(
+            chart,
+            [{
+                type: "bar",
+                orientation: "h",
+                x: features.map(item => item.value),
+                y: features.map(item => item.name),
+                marker: {
+                    color: features.map(
+                        (_, index) => `hsl(${174 - index * 3}, 60%, 42%)`
+                    ),
+                    line: { width: 0 }
+                },
+                hovertemplate:
+                    "%{y}<br>Importance: %{x:.4f}<extra></extra>"
+            }],
+            {
+                paper_bgcolor: "rgba(0,0,0,0)",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                margin: { t: 15, r: 15, b: 45, l: 110 },
+                xaxis: {
+                    title: "Importance",
+                    rangemode: "tozero",
+                    gridcolor: "#eaf1f3"
+                },
+                yaxis: {
+                    automargin: true
+                },
+                font: {
+                    family: "Arial, sans-serif",
+                    color: "#456574"
+                },
+                showlegend: false
+            },
+            {
+                responsive: true,
+                displaylogo: false
+            }
+        );
+
+    } catch (error) {
+        chart.style.display = "none";
+        status.style.display = "block";
+        status.textContent =
+            "Unable to load feature importance. Check the application " +
+            "and the /api/performance endpoint.";
+
+        console.error("Performance chart error:", error);
+    }
+}
+
+loadFeatureImportance();
+</script>
+
+<script src="/static/script.js"></script>
+
+</body>
+</html>

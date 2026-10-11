@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWise | Dataset Explorer</title>
+    <link rel="stylesheet" href="/static/css.css">
+    <style>
+        .page-hero { margin:30px 0;padding:35px;border-radius:25px;background:linear-gradient(120deg,#062f49,#087b91,#17b9ae);color:white; }
+        .page-hero h1 { font-size:clamp(29px,4vw,40px);margin:12px 0; }
+        .page-hero p { color:#d5f4f7;line-height:1.8;max-width:650px; }
+        .dataset-panel { padding:25px;background:white;border:1px solid #d9edf0;border-radius:23px;margin-bottom:35px;box-shadow:0 12px 35px #0843550c; }
+        .dataset-toolbar { display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:20px; }
+        .dataset-toolbar h2 { color:#083b53;margin:0; }
+        #dataset-search { width:min(320px,100%);box-sizing:border-box;padding:12px 15px;border:1px solid #d6e8ed;border-radius:12px;background:#f8fcfd;font:inherit; }
+        .table-wrap { width:100%;overflow-x:auto; }
+        table { width:100%;border-collapse:collapse;white-space:nowrap; }
+        th { padding:15px;background:#e8f8f7;color:#12556a;text-align:left;font-size:12px; }
+        td { padding:14px;border-bottom:1px solid #e7f0f2;color:#466675;font-size:13px; }
+        tbody tr:hover { background:#f4fbfb; }
+        .dataset-footer { display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px; }
+        .page-btn { border:1px solid #cce4e8;background:white;color:#087e88;padding:10px 16px;border-radius:10px;cursor:pointer; }
+        .page-btn:hover { background:#e7faf6; }
+        .page-btn:disabled { opacity:.4;cursor:not-allowed; }
+        .dataset-note { padding:15px;border-radius:13px;background:#eef9fa;color:#587783;font-size:13px;line-height:1.7;margin-top:20px; }
+        @media(max-width:650px) { .dataset-panel { padding:15px; } .page-hero { padding:24px; } }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="container nav-inner">
+        <a href="/" class="brand"><span class="brand-icon">≈</span><span>Water<span style="color:#16c9bd">Wise</span></span></a>
+        <div class="nav-links">
+            <a href="/">Home</a><a href="/dashboard">Dashboard</a><a href="/predict">Forecast</a>
+            <a href="/dataset">Dataset</a><a href="/performance">Performance</a>
+            <a href="/about">About</a><a href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <section class="page-hero">
+        <span class="eyebrow" style="color:#a8fff0">DATA EXPLORATION</span>
+        <h1>Explore Your Dataset</h1>
+        <p>View the water consumption records used by WaterWise. Explore the available observations before interpreting forecasting results.</p>
+    </section>
+
+    <section class="dataset-panel">
+        <div class="dataset-toolbar">
+            <div>
+                <h2>Water Consumption Records</h2>
+                <p class="muted">Search and browse the available data.</p>
+            </div>
+            <input type="search" id="dataset-search" placeholder="Search displayed records..." aria-label="Search dataset">
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead><tr id="dataset-head"></tr></thead>
+                <tbody id="dataset-body">
+                    <tr><td>Loading dataset...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dataset-footer">
+            <span id="dataset-page-info" class="muted">Dataset records</span>
+            <div style="display:flex;gap:10px">
+                <button type="button" class="page-btn" id="prev-page">← Previous</button>
+                <button type="button" class="page-btn" id="next-page">Next →</button>
+            </div>
+        </div>
+
+        <div class="dataset-note">
+            <strong>About the data:</strong> Your project dataset contains Date, Time, Consumption, Temperature, Rain, and Sun fields. Use the actual dataset values for analysis; do not assume missing or unseen records.
+        </div>
+    </section>
+</main>
+
+<footer class="footer"><div class="container"><p>WaterWise · Dataset Explorer</p></div></footer>
+
+<script src="/static/script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const search = document.getElementById("dataset-search");
+    const body = document.getElementById("dataset-body");
+    const previous = document.getElementById("prev-page");
+    const next = document.getElementById("next-page");
+
+    if (search && body) {
+        search.addEventListener("input", function() {
+            const query = search.value.toLowerCase();
+            Array.from(body.rows).forEach(function(row) {
+                row.style.display = row.textContent.toLowerCase().includes(query) ? "" : "none";
+            });
+        });
+    }
+
+    // These controls are visual helpers. If script.js already implements
+    // pagination, keep that existing implementation as the source of truth.
+    if (previous) previous.addEventListener("click", function() {
+        if (typeof window.waterWisePreviousPage === "function") window.waterWisePreviousPage();
+    });
+    if (next) next.addEventListener("click", function() {
+        if (typeof window.waterWiseNextPage === "function") window.waterWiseNextPage();
+    });
+});
+</script>
+<script src="/static/script.js"></script>
+</body>
+</html>

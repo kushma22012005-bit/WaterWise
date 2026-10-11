@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWise | Logout</title>
+    <link rel="stylesheet" href="/static/css.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #052d47, #087b91, #17b9ae);
+        }
+
+        .logout-wrap {
+            min-height: 90vh;
+            display: grid;
+            place-items: center;
+            padding: 25px 16px;
+        }
+
+        .logout-card {
+            width: min(470px, 100%);
+            box-sizing: border-box;
+            padding: 38px;
+            text-align: center;
+            background: white;
+            border: 1px solid #d9edf0;
+            border-radius: 27px;
+            box-shadow: 0 25px 70px #002b4240;
+        }
+
+        .logout-icon {
+            display: grid;
+            place-items: center;
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 23px;
+            border-radius: 24px;
+            background: #dffaf5;
+            color: #078b8a;
+            font-size: 35px;
+        }
+
+        .logout-card h1 {
+            color: #083b53;
+            font-size: 29px;
+            margin-bottom: 12px;
+        }
+
+        .logout-card p {
+            color: #78909c;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .logout-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .logout-actions .button {
+            width: 100%;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        .logout-footer {
+            color: #d5f4f7;
+            font-size: 12px;
+            margin-top: 23px;
+        }
+
+        @media (max-width: 500px) {
+            .logout-card { padding: 26px 20px; }
+        }
+    </style>
+</head>
+<body>
+<main class="logout-wrap">
+    <div>
+        <section class="logout-card">
+            <a href="/" class="brand" style="justify-content:center;text-decoration:none">
+                <span class="brand-icon">≈</span>
+                <span>Water<span style="color:#16c9bd">Wise</span></span>
+            </a>
+
+            <div class="logout-icon" style="margin-top:30px">↗</div>
+
+            <h1>Leaving WaterWise?</h1>
+
+            <p>
+                You can safely end your current session and return whenever
+                you want to explore your water consumption insights again.
+            </p>
+
+            <div class="logout-actions">
+                <form action="/logout" method="post">
+                    <button type="submit" class="button"
+                            style="width:100%;cursor:pointer">
+                        Yes, Log Me Out
+                    </button>
+                </form>
+
+                <a href="/dashboard" class="button button-outline">
+                    Stay on Dashboard
+                </a>
+            </div>
+        </section>
+
+        <p class="logout-footer">WaterWise · Every drop tells a story.</p>
+    </div>
+</main>
+<script src="/static/script.js"></script>
+</body>
+</html>

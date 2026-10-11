@@ -66,13 +66,16 @@ def create_user_table():
 
         existing = {
             row[1]
-            for row in con.execute("PRAGMA table_info(users)").fetchall()
+            for row in con.execute(
+                "PRAGMA table_info(users)"
+            ).fetchall()
         }
 
         if "name" not in existing:
-            con.execute(
-                "ALTER TABLE users ADD COLUMN name TEXT NOT NULL DEFAULT ''"
-            )
+            con.execute("""
+                ALTER TABLE users
+                ADD COLUMN name TEXT NOT NULL DEFAULT ''
+            """)
 
         required = {"email", "password_hash", "salt"}
 
@@ -105,7 +108,9 @@ def hash_password(password: str, salt: str) -> str:
 
 def load_dataset() -> pd.DataFrame:
     if not DATA_PATH.exists():
-        raise FileNotFoundError(f"Dataset not found: {DATA_PATH}")
+        raise FileNotFoundError(
+            f"Dataset not found: {DATA_PATH}"
+        )
 
     return pd.read_csv(DATA_PATH)
 
@@ -117,7 +122,8 @@ def statistics(df: pd.DataFrame) -> dict:
         )
 
     values = pd.to_numeric(
-        df["Consumption"], errors="coerce"
+        df["Consumption"],
+        errors="coerce"
     ).dropna()
 
     if values.empty:
@@ -167,7 +173,8 @@ def find_metric(metrics, *names):
 def predict_consumption(date, time, temperature, rain, sun):
     try:
         dt = datetime.strptime(
-            f"{date} {time}", "%Y-%m-%d %H:%M"
+            f"{date} {time}",
+            "%Y-%m-%d %H:%M"
         )
     except ValueError as exc:
         raise ValueError(
@@ -199,14 +206,17 @@ def predict_consumption(date, time, temperature, rain, sun):
 
 
 # --------------------------------------------------
-# LOGIN PROTECTION
+# SESSION AND LOGIN PROTECTION
 # --------------------------------------------------
 
 @app.middleware("http")
 async def require_login(request: Request, call_next):
     path = request.url.path
 
-    if path in PUBLIC_PATHS or path.startswith("/static/"):
+    if (
+        path in PUBLIC_PATHS
+        or path.startswith("/static/")
+    ):
         return await call_next(request)
 
     if not request.session.get("user"):
@@ -218,9 +228,8 @@ async def require_login(request: Request, call_next):
     return await call_next(request)
 
 
-# IMPORTANT:
-# Register SessionMiddleware AFTER declaring require_login.
-# This ensures session handling wraps the login middleware.
+# Keep WATERWISE_SECRET_KEY configured on Render.
+# The fallback is only for local development.
 app.add_middleware(
     SessionMiddleware,
     secret_key=(
@@ -228,7 +237,10 @@ app.add_middleware(
         or "waterwise-local-development-key"
     ),
     same_site="lax",
-    https_only=True
+    https_only=(
+        os.environ.get("WATERWISE_HTTPS_ONLY", "true").lower()
+        == "true"
+    )
 )
 
 
@@ -238,16 +250,25 @@ app.add_middleware(
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    if request.session.get("user"):
+    user = request.session.get("user")
+
+    if not user:
         return RedirectResponse(
-            "/dashboard",
+            url="/login",
             status_code=303
         )
+
+    success = request.session.pop("flash_message", None)
 
     return templates.TemplateResponse(
         request=request,
         name="index.html",
-        context={}
+        context={
+            "user": user,
+            "user_name": user.get("name", ""),
+            "user_email": user.get("email", ""),
+            "success": success
+        }
     )
 
 
@@ -259,14 +280,20 @@ async def home(request: Request):
 async def login_page(request: Request):
     if request.session.get("user"):
         return RedirectResponse(
-            "/dashboard",
+            url="/",
             status_code=303
         )
 
     return templates.TemplateResponse(
         request=request,
         name="login.html",
-        context={"error": None, "registered": False}
+        context={
+            "error": None,
+            "registered": False,
+            "logged_out": (
+                request.query_params.get("logged_out") == "1"
+            )
+        }
     )
 
 
@@ -291,7 +318,8 @@ async def login_user(
     if (
         user is None
         or not hmac.compare_digest(
-            hash_password(password, user[4]), user[3]
+            hash_password(password, user[4]),
+            user[3]
         )
     ):
         return templates.TemplateResponse(
@@ -299,23 +327,26 @@ async def login_user(
             name="login.html",
             context={
                 "error": "Invalid email or password. Please try again.",
-                "registered": False
+                "registered": False,
+                "logged_out": False
             },
             status_code=401
         )
 
     request.session.clear()
+
     request.session["user"] = {
         "id": user[0],
         "name": user[1],
         "email": user[2]
     }
+
     request.session["flash_message"] = (
-        "Login successful. Welcome back!"
+        "Login successful. Welcome to WaterWise!"
     )
 
     return RedirectResponse(
-        "/dashboard",
+        url="/",
         status_code=303
     )
 
@@ -328,7 +359,7 @@ async def login_user(
 async def signup_page(request: Request):
     if request.session.get("user"):
         return RedirectResponse(
-            "/dashboard",
+            url="/",
             status_code=303
         )
 
@@ -389,34 +420,43 @@ async def signup_user(
                 """,
                 (name, email, digest, salt)
             )
+
     except sqlite3.IntegrityError:
         return templates.TemplateResponse(
             request=request,
             name="signuppage.html",
             context={
-                "error": "This email is already registered. Please log in."
+                "error": (
+                    "This email is already registered. Please log in."
+                )
             },
             status_code=409
         )
 
     with sqlite3.connect(USER_DB) as con:
         user = con.execute(
-            "SELECT id, name, email FROM users WHERE email = ?",
+            """
+            SELECT id, name, email
+            FROM users
+            WHERE email = ?
+            """,
             (email,)
         ).fetchone()
 
     request.session.clear()
+
     request.session["user"] = {
         "id": user[0],
         "name": user[1],
         "email": user[2]
     }
+
     request.session["flash_message"] = (
         "Account created successfully! Welcome to WaterWise."
     )
 
     return RedirectResponse(
-        "/dashboard",
+        url="/",
         status_code=303
     )
 
@@ -425,38 +465,36 @@ async def signup_user(
 # LOGOUT
 # --------------------------------------------------
 
+@app.get("/logout-page", response_class=HTMLResponse)
+async def logout_page(request: Request):
+    # The session has already been cleared before this page is opened.
+    return templates.TemplateResponse(
+        request=request,
+        name="logout.html",
+        context={"user": None}
+    )
+
+
 @app.post("/logout")
 async def logout_post(request: Request):
+    # Clear all session data.
     request.session.clear()
 
-    response = RedirectResponse(
-        url="/login?logged_out=1",
+    # Redirect to the logout confirmation page.
+    return RedirectResponse(
+        url="/logout-page",
         status_code=303
     )
-    response.delete_cookie("session")
-
-    return response
 
 
 @app.get("/logout")
 async def logout_get(request: Request):
+    # Support navigation links using href="/logout".
     request.session.clear()
 
-    response = RedirectResponse(
-        url="/login?logged_out=1",
+    return RedirectResponse(
+        url="/logout-page",
         status_code=303
-    )
-    response.delete_cookie("session")
-
-    return response
-
-
-@app.get("/logout-page", response_class=HTMLResponse)
-async def logout_page(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="logout.html",
-        context={}
     )
 
 
@@ -496,7 +534,7 @@ async def dashboard(request: Request):
 
 
 # --------------------------------------------------
-# PREDICTION
+# PREDICTION PAGE
 # --------------------------------------------------
 
 @app.get("/predict", response_class=HTMLResponse)
@@ -605,18 +643,28 @@ async def performance(request: Request):
             "user": user,
             "user_email": user.get("email", ""),
             "metrics": metrics,
-            "mae": find_metric(metrics, "MAE", "Mean Absolute Error"),
-            "rmse": find_metric(metrics, "RMSE", "Root Mean Squared Error"),
-            "r2": find_metric(metrics, "R2", "R²", "r2_score"),
+            "mae": find_metric(
+                metrics, "MAE", "Mean Absolute Error"
+            ),
+            "rmse": find_metric(
+                metrics, "RMSE", "Root Mean Squared Error"
+            ),
+            "r2": find_metric(
+                metrics, "R2", "R²", "r2_score"
+            ),
             "total_records": len(df),
             "train_records": int(len(df) * 0.8),
             "test_records": len(df) - int(len(df) * 0.8),
             "error": None,
             "feature_importance": sorted(
                 [
-                    {"name": name, "value": float(value)}
+                    {
+                        "name": name,
+                        "value": float(value)
+                    }
                     for name, value in zip(
-                        FEATURES, model.feature_importances_
+                        FEATURES,
+                        model.feature_importances_
                     )
                 ],
                 key=lambda item: item["value"],
@@ -659,7 +707,8 @@ async def dataset_page(request: Request):
         preview_df = df.head(25)
 
         rows = preview_df.astype(object).where(
-            pd.notna(preview_df), None
+            pd.notna(preview_df),
+            None
         ).to_dict(orient="records")
 
         context = {
@@ -736,14 +785,20 @@ async def api_trend():
             dayfirst=True,
             format="mixed"
         )
+
         df["Consumption"] = pd.to_numeric(
-            df["Consumption"], errors="coerce"
+            df["Consumption"],
+            errors="coerce"
         )
 
-        df = df.dropna(subset=["Date", "Consumption"])
+        df = df.dropna(
+            subset=["Date", "Consumption"]
+        )
 
         daily = (
-            df.assign(Date=df["Date"].dt.strftime("%Y-%m-%d"))
+            df.assign(
+                Date=df["Date"].dt.strftime("%Y-%m-%d")
+            )
             .groupby("Date", as_index=False)["Consumption"]
             .sum()
             .tail(90)
@@ -752,8 +807,8 @@ async def api_trend():
         return {
             "dates": daily["Date"].tolist(),
             "consumption": [
-                round(float(v), 3)
-                for v in daily["Consumption"]
+                round(float(value), 3)
+                for value in daily["Consumption"]
             ]
         }
 
@@ -775,7 +830,8 @@ async def api_dataset():
         preview_df = df.head(500)
 
         preview = preview_df.astype(object).where(
-            pd.notna(preview_df), None
+            pd.notna(preview_df),
+            None
         )
 
         return {
@@ -801,9 +857,15 @@ async def api_performance():
         model, df, metrics, test_results = get_trained_model()
 
         return {
-            "mae": find_metric(metrics, "MAE", "Mean Absolute Error"),
-            "rmse": find_metric(metrics, "RMSE", "Root Mean Squared Error"),
-            "r2": find_metric(metrics, "R2", "R²", "r2_score"),
+            "mae": find_metric(
+                metrics, "MAE", "Mean Absolute Error"
+            ),
+            "rmse": find_metric(
+                metrics, "RMSE", "Root Mean Squared Error"
+            ),
+            "r2": find_metric(
+                metrics, "R2", "R²", "r2_score"
+            ),
             "metrics": metrics,
             "total_records": len(df),
             "train_records": int(len(df) * 0.8),

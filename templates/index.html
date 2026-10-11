@@ -4,197 +4,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterWise | Smart Water Forecasting</title>
+    <title>Home | WaterWise</title>
     <link rel="stylesheet" href="/static/css.css">
+
     <style>
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f1f8f7;
-            color: #123640;
-        }
-        nav {
-            background: #082f38;
-            color: white;
-            padding: 20px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-        .brand { font-size: 23px; font-weight: bold; }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 18px;
-            font-size: 14px;
-        }
-        .hero {
-            padding: 75px 8% 65px;
+        .home-hero {
+            position: relative;
+            overflow: hidden;
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 40px;
+            grid-template-columns: 1.15fr 0.85fr;
             align-items: center;
-            min-height: 510px;
+            gap: 45px;
+            padding: 65px;
+            min-height: 490px;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 85% 20%, #23c9b044, transparent 32%),
+                linear-gradient(135deg, #092b35, #105260 70%, #087f78);
+            color: white;
+            box-shadow: 0 25px 65px #092b3526;
         }
-        .tag {
-            color: #008f83;
-            font-weight: bold;
-            letter-spacing: 2px;
-            font-size: 12px;
+
+        .home-hero h1 {
+            margin: 20px 0;
+            font: 800 clamp(38px, 5vw, 62px)/1.12 'Manrope', sans-serif;
+            letter-spacing: -2px;
         }
-        h1 {
-            font-size: clamp(36px, 5vw, 60px);
-            line-height: 1.1;
-            margin: 18px 0;
+
+        .home-hero h1 span {
+            color: #64ead5;
         }
-        h1 span { color: #009d91; }
-        .intro {
-            font-size: 17px;
-            line-height: 1.8;
-            color: #587078;
+
+        .home-hero .intro {
             max-width: 570px;
+            color: #d1e9e8;
+            line-height: 1.9;
+            font-size: 16px;
         }
-        .actions {
+
+        .home-tag {
+            color: #7af0db;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .home-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
+            gap: 13px;
             margin-top: 28px;
         }
-        .btn {
-            padding: 14px 21px;
-            background: #008f83;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: #38dbc1;
+            color: #092b35;
+            font-weight: 800;
+            transition: .2s;
         }
-        .btn.secondary {
-            background: white;
-            color: #087d76;
-            border: 1px solid #b8d9d4;
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.07);
         }
-        .visual {
-            background: linear-gradient(145deg, #0b4650, #087f78);
-            border-radius: 28px;
-            min-height: 320px;
-            padding: 30px;
+
+        .home-btn-outline {
+            border: 1px solid #ffffff65;
+            background: #ffffff10;
             color: white;
-            box-shadow: 0 22px 50px #12364022;
+        }
+
+        .water-visual {
+            position: relative;
+            min-height: 330px;
+            padding: 27px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-        }
-        .water-icon { font-size: 55px; }
-        .visual h2 { font-size: 27px; }
-        .visual p { line-height: 1.7; color: #d0eeea; }
-        .mini-card {
-            background: #ffffff19;
+            overflow: hidden;
             border: 1px solid #ffffff35;
-            padding: 16px;
-            border-radius: 12px;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #ffffff20, #ffffff08);
+            backdrop-filter: blur(10px);
         }
-        .features {
-            padding: 40px 8% 65px;
-            background: white;
+
+        .water-orb {
+            position: absolute;
+            width: 210px;
+            height: 210px;
+            top: 35px;
+            right: -25px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 25%,
+                #c5fff7, #38dbc1 30%, #087f78 70%, #092b35);
+            box-shadow: inset -15px -18px 30px #092b3580,
+                        0 0 55px #38dbc155;
+            animation: floatWater 5s ease-in-out infinite;
         }
-        .features h2 { text-align: center; }
-        .feature-grid {
+
+        .water-orb::after {
+            content: "";
+            position: absolute;
+            top: 30px;
+            left: 37px;
+            width: 48px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ffffffa0;
+            transform: rotate(-35deg);
+            filter: blur(3px);
+        }
+
+        @keyframes floatWater {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 1;
+            margin-top: 190px;
+        }
+
+        .visual-content h2 {
+            font: 800 25px 'Manrope', sans-serif;
+            margin: 10px 0;
+        }
+
+        .visual-content p {
+            color: #d2eae7;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .visual-label {
+            display: inline-block;
+            padding: 8px 12px;
+            border: 1px solid #ffffff35;
+            border-radius: 9px;
+            background: #092b3566;
+            color: #c7fff4;
+            font-size: 12px;
+        }
+
+        .home-section {
+            padding: 48px 0 12px;
+        }
+
+        .home-section-heading {
+            margin-bottom: 25px;
+        }
+
+        .home-section-heading h2 {
+            font: 800 clamp(24px, 3vw, 34px) 'Manrope', sans-serif;
+            color: #092b35;
+        }
+
+        .home-section-heading p {
+            margin-top: 8px;
+            color: #71868b;
+        }
+
+        .home-features {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 20px;
-            margin-top: 30px;
         }
-        .feature {
-            padding: 25px;
-            border: 1px solid #dcebe8;
+
+        .home-feature {
+            padding: 27px;
+            border: 1px solid #dfebe9;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 12px 35px #092b3509;
+            transition: transform .25s, box-shadow .25s;
+        }
+
+        .home-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 40px #092b3515;
+        }
+
+        .feature-icon {
+            display: grid;
+            place-items: center;
+            width: 49px;
+            height: 49px;
+            margin-bottom: 18px;
             border-radius: 15px;
-            background: #fbfdfd;
+            background: #e2faf5;
+            font-size: 23px;
         }
-        .feature h3 { color: #087f78; }
-        .feature p { color: #61777c; line-height: 1.7; }
-        footer {
-            background: #082f38;
-            color: #d7eeeb;
-            text-align: center;
-            padding: 22px;
-            font-size: 13px;
+
+        .home-feature h3 {
+            margin-bottom: 10px;
+            color: #103e49;
+            font: 800 18px 'Manrope', sans-serif;
         }
-        @media (max-width: 750px) {
-            .hero { grid-template-columns: 1fr; padding: 45px 6%; }
-            .feature-grid { grid-template-columns: 1fr; }
-            nav { padding: 18px 5%; }
-            nav a { margin-left: 0; margin-right: 12px; }
+
+        .home-feature p {
+            color: #71868b;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .home-bottom {
+            margin-top: 35px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            border-radius: 20px;
+            background: #e2f8f3;
+            border: 1px solid #c5eee5;
+        }
+
+        .home-bottom h2 {
+            color: #092b35;
+            font: 800 22px 'Manrope', sans-serif;
+        }
+
+        .home-bottom p {
+            margin-top: 6px;
+            color: #587078;
+            font-size: 14px;
+        }
+
+        @media (max-width: 850px) {
+            .home-hero {
+                grid-template-columns: 1fr;
+                padding: 38px;
+                gap: 28px;
+            }
+
+            .water-visual {
+                min-height: 300px;
+            }
+
+            .home-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .home-hero {
+                padding: 27px 22px;
+                border-radius: 20px;
+            }
+
+            .home-hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .home-actions a {
+                width: 100%;
+            }
+
+            .home-bottom {
+                padding: 22px;
+            }
         }
     </style>
 </head>
-<body>
-    <nav>
-        <div class="brand">💧 WaterWise</div>
-        <div>
-            <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/predict">Predict</a>
-            <a href="/performance">Performance</a>
-            <a href="/dataset">Dataset</a>
-        </div>
-    </nav>
 
-    <section class="hero">
+<body>
+
+<nav class="navbar">
+    <a href="/" class="brand">
+        <span class="brand-icon">◉</span>
+        WaterWise
+    </a>
+
+    <div class="nav-links">
+        <a class="active" href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/predict">Predict</a>
+        <a href="/performance">Performance</a>
+        <a href="/about">About</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="home-hero">
         <div>
-            <div class="tag">MACHINE LEARNING · WATER INTELLIGENCE</div>
-            <h1>Understand Water.<br><span>Predict Tomorrow.</span></h1>
+            <div class="home-tag">WATER INTELLIGENCE · DATA SCIENCE</div>
+
+            <h1>
+                Understand Water.<br>
+                <span>Predict Tomorrow.</span>
+            </h1>
+
             <p class="intro">
-                Explore historical water consumption, understand usage
-                patterns and forecast future demand with WaterWise,
-                a machine learning-based water consumption forecasting
-                project.
+                WaterWise helps you explore historical water consumption,
+                understand usage patterns and forecast water demand using
+                data analysis and a trained machine learning model.
+                Turn your data into useful insights for smarter water planning.
             </p>
-            <div class="actions">
-                <a class="btn" href="/predict">Explore Prediction →</a>
-                <a class="btn secondary" href="/dashboard">View Dashboard</a>
+
+            <div class="home-actions">
+                <a class="home-btn" href="/predict">
+                    Explore Prediction &rarr;
+                </a>
+
+                <a class="home-btn home-btn-outline" href="/dashboard">
+                    View Dashboard
+                </a>
             </div>
         </div>
 
-        <div class="visual">
-            <div class="water-icon">💧</div>
-            <div>
-                <div class="tag" style="color:#91eee0">SMART WATER ANALYTICS</div>
+        <div class="water-visual">
+            <div class="water-orb"></div>
+
+            <div class="visual-content">
+                <span class="visual-label">SMART WATER ANALYTICS</span>
                 <h2>Every Drop Tells a Story.</h2>
                 <p>
-                    Turn historical consumption and weather information
-                    into useful insights for better water planning.
+                    Explore consumption data, analyse patterns and use
+                    forecasting insights to support better water planning.
                 </p>
             </div>
-            <div class="mini-card">
-                <strong>Explore · Analyse · Forecast</strong>
-                <p style="margin-bottom:0">A data-driven approach to water awareness.</p>
-            </div>
         </div>
     </section>
 
-    <section class="features">
-        <h2>Your Water Data, Made Meaningful</h2>
-        <div class="feature-grid">
-            <div class="feature">
-                <h3>01 · Usage Insights</h3>
-                <p>Explore consumption records and discover patterns in historical data.</p>
+    <section class="home-section">
+        <div class="home-section-heading">
+            <span class="eyebrow">WHAT YOU CAN DO</span>
+            <h2>Make Your Water Data Meaningful</h2>
+            <p>
+                Explore the main tools available in your WaterWise project.
+            </p>
+        </div>
+
+        <div class="home-features">
+            <article class="home-feature">
+                <div class="feature-icon">⌁</div>
+                <h3>Usage Insights</h3>
+                <p>
+                    Explore historical records, review consumption statistics
+                    and discover patterns in your available water data.
+                </p>
+            </article>
+
+            <article class="home-feature">
+                <div class="feature-icon">◈</div>
+                <h3>Consumption Prediction</h3>
+                <p>
+                    Enter the required input values and use the trained model
+                    to estimate water consumption.
+                </p>
+            </article>
+
+            <article class="home-feature">
+                <div class="feature-icon">▥</div>
+                <h3>Model Evaluation</h3>
+                <p>
+                    Review evaluation metrics such as MAE, RMSE and R²
+                    to understand how the forecasting model performs.
+                </p>
+            </article>
+        </div>
+
+        <div class="home-bottom">
+            <div>
+                <h2>Ready to explore your water data?</h2>
+                <p>Start with the dashboard or try a consumption prediction.</p>
             </div>
-            <div class="feature">
-                <h3>02 · ML Prediction</h3>
-                <p>Use the trained forecasting model to estimate consumption from input features.</p>
-            </div>
-            <div class="feature">
-                <h3>03 · Model Evaluation</h3>
-                <p>Review model performance metrics to understand forecasting accuracy.</p>
-            </div>
+
+            <a class="home-btn" href="/dashboard">
+                Open Dashboard &rarr;
+            </a>
         </div>
     </section>
 
-    <footer>
-        WaterWise · Water Consumption and Usage Forecasting · MCA Data Science Project
-    </footer>
+</main>
+
+<footer class="footer">
+    WaterWise · Water Consumption and Usage Forecasting · MCA Data Science Project
+</footer>
+
 </body>
 </html>

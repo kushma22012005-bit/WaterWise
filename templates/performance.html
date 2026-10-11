@@ -1,16 +1,145 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model Performance | WaterWise</title>
+    <meta name="description" content="Review the evaluation metrics of the WaterWise water consumption forecasting model.">
+
     <link rel="stylesheet" href="/static/css.css">
+
+    <style>
+        .performance-hero {
+            padding: 32px;
+            border-radius: 23px;
+            background:
+                radial-gradient(circle at 90% 10%, #23c9b044, transparent 35%),
+                linear-gradient(125deg, #092b35, #105260);
+            color: white;
+        }
+
+        .performance-hero .eyebrow {
+            color: #70ead7;
+        }
+
+        .performance-hero h1 {
+            margin: 8px 0 12px;
+            font: 800 clamp(28px, 4vw, 38px) 'Manrope', sans-serif;
+        }
+
+        .performance-hero p {
+            max-width: 760px;
+            color: #d0e8e6;
+            line-height: 1.8;
+        }
+
+        .performance-grid {
+            margin-top: 25px;
+        }
+
+        .metric-icon {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            margin-bottom: 17px;
+            border-radius: 14px;
+            background: #e2faf5;
+            color: #087f70;
+            font-size: 21px;
+        }
+
+        .metric-label {
+            color: #71868b;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .metric-description {
+            margin-top: 8px;
+            color: #71868b;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .explanation-list {
+            display: grid;
+            gap: 17px;
+            margin-top: 22px;
+        }
+
+        .explanation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 18px;
+            border: 1px solid #dfebe9;
+            border-radius: 15px;
+            background: #fbfdfd;
+        }
+
+        .explanation-symbol {
+            display: grid;
+            flex: 0 0 42px;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #e2faf5;
+            color: #087f70;
+            font-weight: 800;
+        }
+
+        .explanation-item h3 {
+            margin-bottom: 5px;
+            color: #103e49;
+            font-size: 15px;
+        }
+
+        .explanation-item p {
+            color: #71868b;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .evaluation-note {
+            margin-top: 22px;
+            padding: 18px;
+            border: 1px solid #c5eee5;
+            border-radius: 14px;
+            background: #eafaf6;
+            color: #285c58;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .performance-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        @media (max-width: 600px) {
+            .performance-hero {
+                padding: 24px;
+            }
+
+            .explanation-item {
+                padding: 14px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
 <nav class="navbar">
     <a href="/" class="brand">
-        <span class="brand-icon">◉</span> WaterWise
+        <span class="brand-icon">◉</span>
+        WaterWise
     </a>
 
     <div class="nav-links">
@@ -18,95 +147,156 @@
         <a href="/dashboard">Dashboard</a>
         <a href="/predict">Predict</a>
         <a class="active" href="/performance">Performance</a>
-        <a href="/dataset">Dataset</a>
         <a href="/about">About</a>
+        <a href="/logout">Logout</a>
     </div>
 </nav>
 
 <main class="container">
 
-    <div class="section-heading">
+    <section class="performance-hero">
         <span class="eyebrow">MODEL EVALUATION</span>
-        <h1>Model Performance</h1>
+        <h1>How Well Does WaterWise Predict?</h1>
         <p>
-            Evaluate how accurately the WaterWise model predicts
-            water consumption using unseen test data.
+            Review the evaluation metrics used to understand the accuracy
+            of the water consumption forecasting model. These measurements
+            help explain the difference between actual and predicted values.
         </p>
-    </div>
+    </section>
 
-    <div id="performance-status" class="notice" role="status"
+    <div id="performance-status"
+         class="notice"
+         role="status"
          aria-live="polite">
         Loading model evaluation results...
     </div>
 
-    <section class="grid">
+    <section class="grid performance-grid">
 
         <article class="card">
-            <h3>MAE</h3>
+            <div class="metric-icon">±</div>
+            <p class="metric-label">MAE</p>
             <div class="metric" id="mae">—</div>
-            <p class="muted">Mean Absolute Error</p>
+            <p class="metric-description">
+                Mean Absolute Error
+            </p>
+            <p class="metric-description">
+                Lower values generally indicate smaller average errors.
+            </p>
         </article>
 
         <article class="card">
-            <h3>RMSE</h3>
+            <div class="metric-icon">∑</div>
+            <p class="metric-label">RMSE</p>
             <div class="metric" id="rmse">—</div>
-            <p class="muted">Root Mean Squared Error</p>
+            <p class="metric-description">
+                Root Mean Squared Error
+            </p>
+            <p class="metric-description">
+                Larger errors have a stronger effect on this metric.
+            </p>
         </article>
 
         <article class="card">
-            <h3>R² Score</h3>
+            <div class="metric-icon">R²</div>
+            <p class="metric-label">R² SCORE</p>
             <div class="metric" id="r2">—</div>
-            <p class="muted">Coefficient of Determination</p>
+            <p class="metric-description">
+                Coefficient of Determination
+            </p>
+            <p class="metric-description">
+                Shows how well predictions explain variation in the target.
+            </p>
         </article>
 
     </section>
 
     <section class="panel">
+        <span class="eyebrow">METRIC GUIDE</span>
         <h2>Understanding the Results</h2>
 
-        <p class="muted" style="margin-top: 12px;">
-            <strong>MAE:</strong> Shows the average absolute difference
-            between actual and predicted consumption.
-        </p>
+        <div class="explanation-list">
 
-        <p class="muted">
-            <strong>RMSE:</strong> Measures prediction error and gives
-            greater weight to larger errors.
-        </p>
+            <article class="explanation-item">
+                <div class="explanation-symbol">01</div>
+                <div>
+                    <h3>Mean Absolute Error (MAE)</h3>
+                    <p>
+                        MAE measures the average absolute difference between
+                        actual consumption and predicted consumption.
+                        A lower MAE generally means predictions are closer
+                        to the actual values.
+                    </p>
+                </div>
+            </article>
 
-        <p class="muted">
-            <strong>R² Score:</strong> Indicates how well the model
-            explains variation in the test data. A value closer to 1
-            generally indicates a better fit.
-        </p>
+            <article class="explanation-item">
+                <div class="explanation-symbol">02</div>
+                <div>
+                    <h3>Root Mean Squared Error (RMSE)</h3>
+                    <p>
+                        RMSE measures prediction errors while giving greater
+                        weight to larger errors. It uses the same unit as
+                        the consumption target.
+                    </p>
+                </div>
+            </article>
 
-        <p class="muted">
-            MAE and RMSE use the same units as the consumption target.
-            The R² score can be negative when the model performs worse
-            than a simple mean-based prediction.
-        </p>
+            <article class="explanation-item">
+                <div class="explanation-symbol">03</div>
+                <div>
+                    <h3>R² Score</h3>
+                    <p>
+                        R² indicates how much variation in the target is
+                        explained by the model relative to a mean-based
+                        baseline. A value closer to 1 can indicate a better
+                        fit; a negative value is also possible.
+                    </p>
+                </div>
+            </article>
+
+        </div>
+
+        <div class="evaluation-note">
+            <strong>Important:</strong> No performance values are estimated
+            or manually invented on this page. The displayed metrics should
+            come from the actual backend evaluation results.
+        </div>
     </section>
 
     <section class="panel">
-        <h2>Evaluation Method</h2>
+        <span class="eyebrow">EVALUATION PROCESS</span>
+        <h2>How the Model Is Evaluated</h2>
 
-        <p class="muted" style="margin-top: 12px;">
-            WaterWise uses a Random Forest Regression model. Its
-            performance is evaluated on a chronological test set
-            that is kept separate from the training data.
+        <p class="muted" style="margin-top:12px;line-height:1.9;">
+            WaterWise uses a Random Forest Regression model, as described
+            in the existing project page. Evaluation should use the
+            chronological test data kept separate from the training data,
+            where that is how the model is implemented.
         </p>
 
-        <p class="muted">
-            The metrics displayed above should come from the actual
-            evaluation results produced by the backend, not manually
-            entered or estimated values.
+        <p class="muted" style="margin-top:12px;line-height:1.9;">
+            The actual preprocessing, training and test-splitting logic
+            must remain consistent with the project's backend. The
+            evaluation results help assess model performance, but do not
+            guarantee future predictions will always be accurate.
         </p>
+
+        <div class="performance-actions">
+            <a href="/dashboard" class="button button-outline">
+                &larr; Back to Dashboard
+            </a>
+
+            <a href="/predict" class="button">
+                Try a Prediction &rarr;
+            </a>
+        </div>
     </section>
 
 </main>
 
 <footer class="footer">
-    WaterWise · Water Consumption Forecasting
+    WaterWise · Water Consumption and Usage Forecasting · MCA Data Science Project
 </footer>
 
 <script src="/static/script.js"></script>

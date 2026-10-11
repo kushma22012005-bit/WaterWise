@@ -1,163 +1,307 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | WaterWise</title>
+    <title>About WaterWise</title>
+    <link rel="stylesheet" href="/static/css.css">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: Arial, sans-serif;
-            background: #eef7f6;
-            color: #183b43;
-            line-height: 1.7;
+            background:
+                radial-gradient(circle at 90% 5%, rgba(35,201,176,.13), transparent 28%),
+                linear-gradient(135deg, #061f2a, #0b3540 55%, #092b35);
+            color: #f4ffff;
         }
 
-        nav {
-            background: #103f46;
-            padding: 18px 7%;
-            display: flex;
-            justify-content: space-between;
+        .about-hero {
+            padding: 65px 0 45px;
+            display: grid;
+            grid-template-columns: 1.3fr .7fr;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 30px;
         }
 
-        .logo {
+        .eyebrow {
+            color: #61ead4;
+            letter-spacing: 3px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .about-hero h1 {
+            font-size: clamp(36px, 5vw, 58px);
+            line-height: 1.12;
+            margin: 18px 0;
+        }
+
+        .about-hero p {
+            color: #bed8dd;
+            line-height: 1.9;
+            max-width: 650px;
+            font-size: 16px;
+        }
+
+        .water-art {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 270px;
+        }
+
+        .orb {
+            width: 190px;
+            height: 190px;
+            border-radius: 42% 58% 57% 43% / 44% 42% 58% 56%;
+            background: linear-gradient(145deg, #b1fff3, #29d5c0 45%, #087b96);
+            box-shadow:
+                inset -15px -18px 35px rgba(0,42,65,.45),
+                inset 12px 12px 28px rgba(255,255,255,.55),
+                0 0 70px rgba(35,201,176,.28);
+            display: grid;
+            place-items: center;
             color: white;
+            font-size: 70px;
+            font-weight: 800;
+            text-shadow: 0 5px 20px rgba(0,45,65,.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-13px) rotate(5deg); }
+        }
+
+        .about-section {
+            margin: 20px 0;
+            padding: clamp(23px, 4vw, 35px);
+            border-radius: 20px;
+            background: rgba(255,255,255,.97);
+            color: #183b43;
+            border: 1px solid rgba(157,255,238,.3);
+            box-shadow: 0 18px 45px rgba(0,0,0,.13);
+        }
+
+        .about-section h2 {
+            color: #087e76;
+            margin: 0 0 15px;
             font-size: 25px;
-            font-weight: bold;
         }
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 18px;
+        .about-section > p {
+            line-height: 1.85;
+            color: #526d74;
+        }
+
+        .section-intro {
+            margin-bottom: 22px;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .about-card {
+            padding: 23px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f3fcfa, #e7f8f4);
+            border: 1px solid #d4eee7;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .about-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(10,110,105,.1);
+        }
+
+        .card-symbol {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: #d5f7ee;
+            color: #087e76;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .about-card h3 {
+            color: #174b50;
+            margin-bottom: 9px;
+            font-size: 17px;
+        }
+
+        .about-card p {
+            color: #607a80;
+            line-height: 1.75;
             font-size: 14px;
         }
 
-        nav a:hover {
-            color: #8ee0d0;
-        }
-
-        .hero {
-            padding: 65px 8%;
-            text-align: center;
-            color: white;
-            background: linear-gradient(135deg, #103f46, #168b83);
-        }
-
-        .hero h1 {
-            font-size: 42px;
-            margin-bottom: 12px;
-        }
-
-        .hero p {
-            max-width: 720px;
-            margin: auto;
-            color: #e0f6f1;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 35px 20px;
-        }
-
-        .section {
-            background: white;
-            margin-bottom: 25px;
-            padding: 28px;
-            border-radius: 15px;
-            box-shadow: 0 5px 18px #173f4310;
-            border: 1px solid #dcece8;
-        }
-
-        h2 {
-            color: #11766f;
-            margin-bottom: 12px;
-        }
-
-        .cards {
+        .process {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
+            gap: 0;
+            margin-top: 22px;
         }
 
-        .card {
-            background: #f1faf7;
-            padding: 22px;
+        .process-step {
+            display: grid;
+            grid-template-columns: 45px 1fr;
+            gap: 15px;
+            padding: 17px 0;
+            border-bottom: 1px solid #e4efee;
+        }
+
+        .process-step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
             border-radius: 12px;
-            border: 1px solid #d4ebe4;
+            background: #d9f8f0;
+            color: #087e76;
+            font-weight: 800;
         }
 
-        .card h3 {
-            color: #126c68;
-            margin-bottom: 8px;
+        .process-step h3 {
+            color: #174b50;
+            margin: 0 0 5px;
+            font-size: 16px;
         }
 
-        .steps {
-            padding-left: 23px;
+        .process-step p {
+            color: #607a80;
+            line-height: 1.7;
+            font-size: 14px;
         }
 
-        .steps li {
-            margin-bottom: 10px;
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         .tag {
-            display: inline-block;
-            background: #d9f2e9;
-            color: #145e57;
-            padding: 7px 13px;
-            border-radius: 20px;
-            margin: 5px 5px 5px 0;
-            font-size: 14px;
+            padding: 9px 15px;
+            border-radius: 30px;
+            color: #08766e;
+            background: #e1f8f1;
+            border: 1px solid #c6eee3;
+            font-size: 13px;
+            font-weight: 700;
         }
 
-        .cta {
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px 25px;
+            margin-top: 18px;
+            list-style: none;
+        }
+
+        .feature-list li {
+            color: #526d74;
+            line-height: 1.7;
+            padding-left: 26px;
+            position: relative;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #07977f;
+            font-weight: 800;
+        }
+
+        .cta-section {
+            margin: 25px 0 40px;
+            padding: 40px 25px;
             text-align: center;
-            background: #dff3ee;
+            border-radius: 22px;
+            background: linear-gradient(120deg, #0a716f, #18a995, #26cbb0);
+            box-shadow: 0 18px 45px rgba(0,0,0,.17);
         }
 
-        .btn {
+        .cta-section h2 {
+            font-size: 29px;
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            color: #e1fffa;
+            line-height: 1.8;
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .cta-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 13px;
+            margin-top: 23px;
+        }
+
+        .cta-links a {
             display: inline-block;
-            background: #11766f;
-            color: white;
-            padding: 12px 22px;
-            border-radius: 8px;
             text-decoration: none;
-            margin-top: 15px;
+            padding: 13px 21px;
+            border-radius: 11px;
+            font-weight: 800;
+            transition: transform .2s;
         }
 
-        .btn:hover {
-            background: #0b5551;
+        .cta-links a:hover {
+            transform: translateY(-2px);
         }
 
-        footer {
-            background: #103f46;
+        .cta-primary {
+            color: #07534f;
+            background: white;
+        }
+
+        .cta-secondary {
             color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 15px;
+            border: 1px solid rgba(255,255,255,.65);
+            background: rgba(255,255,255,.1);
         }
 
-        @media (max-width: 600px) {
-            .hero h1 {
-                font-size: 32px;
+        .footer {
+            color: #a8c6cc;
+            border-top: 1px solid rgba(255,255,255,.1);
+            background: transparent;
+        }
+
+        @media (max-width: 700px) {
+            .about-hero {
+                grid-template-columns: 1fr;
+                padding-top: 40px;
+                gap: 0;
             }
 
-            nav {
-                justify-content: center;
+            .water-art {
+                min-height: 220px;
             }
 
-            nav a {
-                margin: 5px;
+            .orb {
+                width: 150px;
+                height: 150px;
+                font-size: 55px;
+            }
+
+            .about-grid,
+            .feature-list {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -165,196 +309,264 @@
 
 <body>
 
-    <nav>
-        <div class="logo">💧 WaterWise</div>
+<nav class="navbar">
+    <a href="/" class="brand">
+        <span class="brand-icon">◉</span> WaterWise
+    </a>
 
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/predict">Predict</a>
+        <a href="/performance">Performance</a>
+        <a class="active" href="/about">About</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="about-hero">
         <div>
-            <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/predict">Forecast</a>
-            <a href="/performance">Performance</a>
-            <a href="/dataset">Dataset</a>
-            <a href="/about">About</a>
+            <span class="eyebrow">THE STORY BEHIND WATERWISE</span>
+            <h1>Every Drop Has a Story.</h1>
+            <p>
+                WaterWise is a water consumption analysis and forecasting
+                project that transforms historical records into useful
+                insights. By exploring consumption patterns and environmental
+                conditions, it helps users understand water usage and make
+                more informed planning decisions.
+            </p>
         </div>
-    </nav>
 
-    <section class="hero">
-        <h1>About WaterWise</h1>
+        <div class="water-art" aria-label="WaterWise water-inspired illustration">
+            <div class="orb">W</div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2>What is WaterWise?</h2>
         <p>
-            Understanding water consumption through data analytics
-            and forecasting to support smarter and more responsible
+            WaterWise combines data preprocessing, exploratory data analysis,
+            visualization, machine learning and model evaluation in one web
+            application. Users can explore historical consumption statistics,
+            view trends and submit selected conditions to obtain a model-based
+            consumption estimate.
+        </p>
+    </section>
+
+    <section class="about-section">
+        <h2>The Problem We Address</h2>
+        <p>
+            Water usage can change with time, temperature, rainfall, sunshine
+            and other conditions. Looking at raw records alone can make it
+            difficult to identify patterns or estimate possible demand.
+            WaterWise makes these records easier to explore through visual
+            summaries and a forecasting interface. Its predictions are
+            estimates based on available data, not guaranteed future values.
+        </p>
+    </section>
+
+    <section class="about-section">
+        <h2>Our Project Objectives</h2>
+        <p class="section-intro">
+            The project focuses on turning historical water records into
+            understandable information.
+        </p>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="card-symbol">⌕</div>
+                <h3>01 · Analyze Data</h3>
+                <p>Explore historical water consumption and identify useful patterns in the records.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="card-symbol">▥</div>
+                <h3>02 · Visualize Trends</h3>
+                <p>Present important statistics and changes in consumption in a clear visual format.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="card-symbol">↗</div>
+                <h3>03 · Forecast Usage</h3>
+                <p>Use the trained forecasting model to estimate consumption for selected conditions.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="card-symbol">✓</div>
+                <h3>04 · Evaluate Results</h3>
+                <p>Use suitable evaluation metrics to understand the model's prediction errors and performance.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2>How WaterWise Works</h2>
+        <p class="section-intro">
+            From historical records to a forecast, the application follows
+            a data-driven workflow.
+        </p>
+
+        <div class="process">
+            <div class="process-step">
+                <div class="step-number">01</div>
+                <div>
+                    <h3>Data Collection</h3>
+                    <p>Load the historical dataset containing consumption, date, time and environmental information.</p>
+                </div>
+            </div>
+
+            <div class="process-step">
+                <div class="step-number">02</div>
+                <div>
+                    <h3>Data Preprocessing</h3>
+                    <p>Prepare the data, check its quality and create the features needed by the model.</p>
+                </div>
+            </div>
+
+            <div class="process-step">
+                <div class="step-number">03</div>
+                <div>
+                    <h3>Exploratory Analysis</h3>
+                    <p>Inspect consumption patterns and use visualizations to better understand the dataset.</p>
+                </div>
+            </div>
+
+            <div class="process-step">
+                <div class="step-number">04</div>
+                <div>
+                    <h3>Model Training</h3>
+                    <p>Train the forecasting model using the historical data and the features defined by the project.</p>
+                </div>
+            </div>
+
+            <div class="process-step">
+                <div class="step-number">05</div>
+                <div>
+                    <h3>Performance Evaluation</h3>
+                    <p>Review metrics such as MAE, RMSE and R² when available to understand prediction quality.</p>
+                </div>
+            </div>
+
+            <div class="process-step">
+                <div class="step-number">06</div>
+                <div>
+                    <h3>Forecast and Explore</h3>
+                    <p>Submit input conditions and explore consumption summaries and trends through the website.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <h2>Dataset Information</h2>
+        <p>
+            WaterWise uses a historical water consumption dataset. The
+            following fields are used by the project's forecasting workflow:
+        </p>
+
+        <div class="tags">
+            <span class="tag">Date</span>
+            <span class="tag">Time</span>
+            <span class="tag">Consumption</span>
+            <span class="tag">Temperature</span>
+            <span class="tag">Rain</span>
+            <span class="tag">Sun</span>
+        </div>
+
+        <p style="margin-top:20px;">
+            These fields help the application examine consumption over time
+            and explore how recorded environmental conditions relate to
             water usage.
         </p>
     </section>
 
-    <main class="container">
+    <section class="about-section">
+        <h2>Technology Stack</h2>
 
-        <section class="section">
-            <h2>What is WaterWise?</h2>
-            <p>
-                WaterWise is a water consumption analysis and forecasting
-                project developed to understand historical water usage
-                patterns and estimate future consumption. It combines
-                data preprocessing, visualization, statistical evaluation
-                and machine learning to make water consumption data easier
-                to understand.
-            </p>
-        </section>
-
-        <section class="section">
-            <h2>Problem Statement</h2>
-            <p>
-                Water consumption changes over time due to factors such as
-                temperature, rainfall, sunlight and daily usage patterns.
-                Without proper analysis, it can be difficult to identify
-                consumption trends and anticipate future demand.
-                WaterWise addresses this problem by analyzing historical
-                records and presenting useful information through a
-                simple web interface.
-            </p>
-        </section>
-
-        <section class="section">
-            <h2>Project Objectives</h2>
-
-            <div class="cards">
-                <div class="card">
-                    <h3>01. Analyze Data</h3>
-                    <p>Study historical water consumption and identify usage patterns.</p>
-                </div>
-
-                <div class="card">
-                    <h3>02. Visualize Trends</h3>
-                    <p>Present important consumption statistics in an understandable format.</p>
-                </div>
-
-                <div class="card">
-                    <h3>03. Forecast Usage</h3>
-                    <p>Estimate water consumption using the trained forecasting model.</p>
-                </div>
-
-                <div class="card">
-                    <h3>04. Evaluate Results</h3>
-                    <p>Use model evaluation metrics to understand prediction performance.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>How WaterWise Works</h2>
-
-            <ol class="steps">
-                <li><strong>Data Collection:</strong> Load the historical water consumption dataset.</li>
-                <li><strong>Data Preprocessing:</strong> prepare dates, handle missing values and create useful time-based features.</li>
-                <li><strong>Exploratory Analysis:</strong> inspect consumption patterns and visualize the data.</li>
-                <li><strong>Model Training:</strong> train the forecasting model using historical records.</li>
-                <li><strong>Performance Evaluation:</strong> evaluate predictions using MAE, RMSE and R² where available.</li>
-                <li><strong>Forecasting:</strong> estimate consumption for selected input conditions.</li>
-                <li><strong>Web Presentation:</strong> display information through the WaterWise website.</li>
-            </ol>
-        </section>
-
-        <section class="section">
-            <h2>Dataset Information</h2>
-            <p>
-                The project dataset contains historical water consumption
-                observations along with date, time and environmental
-                information.
-            </p>
-
-            <div style="margin-top: 15px;">
-                <span class="tag">Date</span>
-                <span class="tag">Time</span>
-                <span class="tag">Consumption</span>
-                <span class="tag">Temperature</span>
-                <span class="tag">Rain</span>
-                <span class="tag">Sun</span>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="card-symbol">Py</div>
+                <h3>Python</h3>
+                <p>Supports data processing, model training and forecasting logic.</p>
             </div>
 
-            <p style="margin-top: 15px;">
-                These variables help the project explore changes in
-                consumption over time and examine the relationship
-                between weather conditions and water usage.
-            </p>
-        </section>
-
-        <section class="section">
-            <h2>Technology Stack</h2>
-
-            <div class="cards">
-                <div class="card">
-                    <h3>Python</h3>
-                    <p>Data processing, model training and forecasting logic.</p>
-                </div>
-
-                <div class="card">
-                    <h3>Pandas</h3>
-                    <p>Dataset loading, cleaning and transformation.</p>
-                </div>
-
-                <div class="card">
-                    <h3>Scikit-learn</h3>
-                    <p>Machine learning model development and evaluation.</p>
-                </div>
-
-                <div class="card">
-                    <h3>FastAPI</h3>
-                    <p>Backend routes that connect the website with the Python code.</p>
-                </div>
-
-                <div class="card">
-                    <h3>HTML & CSS</h3>
-                    <p>Website structure, layout and visual styling.</p>
-                </div>
-
-                <div class="card">
-                    <h3>JavaScript</h3>
-                    <p>Interactive website features and API communication.</p>
-                </div>
+            <div class="about-card">
+                <div class="card-symbol">▤</div>
+                <h3>Pandas</h3>
+                <p>Helps load, inspect, clean and transform dataset records.</p>
             </div>
-        </section>
 
-        <section class="section">
-            <h2>Key Features</h2>
-            <ul class="steps">
-                <li>Water consumption overview and summary statistics.</li>
-                <li>Historical consumption trend analysis.</li>
-                <li>Consumption prediction based on user inputs.</li>
-                <li>Model performance evaluation.</li>
-                <li>Dataset preview and information.</li>
-                <li>A simple, accessible interface for exploring results.</li>
-            </ul>
-        </section>
+            <div class="about-card">
+                <div class="card-symbol">ML</div>
+                <h3>Scikit-learn</h3>
+                <p>Provides tools for machine learning model development and evaluation.</p>
+            </div>
 
-        <section class="section">
-            <h2>Project Scope and Limitations</h2>
-            <p>
-                WaterWise provides data-driven estimates based on the
-                available dataset and trained model. Predictions are
-                estimates, not guaranteed future consumption values.
-                Their reliability depends on data quality, the variables
-                available and how well the historical patterns represent
-                future conditions.
-            </p>
-        </section>
+            <div class="about-card">
+                <div class="card-symbol">API</div>
+                <h3>FastAPI</h3>
+                <p>Connects the web interface with the Python backend.</p>
+            </div>
 
-        <section class="section cta">
-            <h2>Explore WaterWise</h2>
-            <p>
-                Visit the dashboard to explore water consumption data
-                or use the forecasting page to estimate consumption.
-            </p>
+            <div class="about-card">
+                <div class="card-symbol">〈〉</div>
+                <h3>HTML & CSS</h3>
+                <p>Build the page structure, responsive layouts and visual appearance.</p>
+            </div>
 
-            <a href="/dashboard" class="btn">View Dashboard</a>
-            <a href="/predict" class="btn">Try Forecasting</a>
-        </section>
+            <div class="about-card">
+                <div class="card-symbol">JS</div>
+                <h3>JavaScript</h3>
+                <p>Supports interactive elements and communication with backend APIs.</p>
+            </div>
+        </div>
+    </section>
 
-    </main>
+    <section class="about-section">
+        <h2>Key Features</h2>
+        <ul class="feature-list">
+            <li>Consumption summary and statistics</li>
+            <li>Historical consumption trend visualization</li>
+            <li>Forecasting using user-provided conditions</li>
+            <li>Model evaluation metrics</li>
+            <li>Data-driven insights through a simple interface</li>
+            <li>Responsive layout for different screen sizes</li>
+        </ul>
+    </section>
 
-    <footer>
-        <p>WaterWise | Water Consumption Analysis and Forecasting</p>
-        <p>Data-driven insights for smarter water usage.</p>
-    </footer>
+    <section class="about-section">
+        <h2>Scope and Limitations</h2>
+        <p>
+            WaterWise is an educational data science project designed to
+            explore water consumption and forecasting. Results depend on
+            dataset quality, the features used by the model and how well
+            historical observations represent future conditions. The
+            application should be used to explore patterns and estimates,
+            not as a substitute for actual water measurements or an
+            operational water-management system.
+        </p>
+    </section>
+
+    <section class="cta-section">
+        <h2>Explore WaterWise</h2>
+        <p>
+            Discover historical consumption patterns or try the forecasting
+            page to generate an estimate using the connected model.
+        </p>
+
+        <div class="cta-links">
+            <a class="cta-primary" href="/dashboard">Explore Dashboard →</a>
+            <a class="cta-secondary" href="/predict">Try Forecasting →</a>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    WaterWise · Water Consumption and Usage Forecasting
+</footer>
 
 </body>
 </html>

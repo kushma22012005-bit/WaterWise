@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logged Out | WaterWise</title>
+    <meta name="theme-color" content="#061f2a">
 
     <style>
         * {
@@ -13,76 +15,285 @@
         body {
             margin: 0;
             min-height: 100vh;
-            padding: 20px;
+            padding: 22px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #e0f7fa, #e8f5e9, #dbeafe);
+            color: #f4ffff;
+            background:
+                radial-gradient(circle at 18% 15%, rgba(35,201,176,.17), transparent 30%),
+                radial-gradient(circle at 85% 85%, rgba(14,126,150,.23), transparent 30%),
+                linear-gradient(135deg, #041821, #092b35 52%, #06414a);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .water-background {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .glow {
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            border-radius: 50%;
+            background: #20d8bc;
+            filter: blur(75px);
+            opacity: .2;
+            animation: drift 12s ease-in-out infinite alternate;
+        }
+
+        .glow-one {
+            top: -120px;
+            left: -100px;
+        }
+
+        .glow-two {
+            right: -100px;
+            bottom: -130px;
+            background: #087eaa;
+            animation-delay: -4s;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -70px;
+            border: 1px solid rgba(188,255,245,.3);
+            border-radius: 50%;
+            background: rgba(144,255,239,.04);
+            animation: rise linear infinite;
+        }
+
+        .bubble:nth-child(3) {
+            left: 12%;
+            width: 24px;
+            height: 24px;
+            animation-duration: 13s;
+        }
+
+        .bubble:nth-child(4) {
+            left: 28%;
+            width: 13px;
+            height: 13px;
+            animation-duration: 10s;
+            animation-delay: -3s;
+        }
+
+        .bubble:nth-child(5) {
+            left: 75%;
+            width: 30px;
+            height: 30px;
+            animation-duration: 15s;
+            animation-delay: -6s;
+        }
+
+        .bubble:nth-child(6) {
+            left: 91%;
+            width: 16px;
+            height: 16px;
+            animation-duration: 11s;
+            animation-delay: -2s;
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            15% { opacity: .7; }
+            to {
+                transform: translateY(-115vh) translateX(25px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes drift {
+            from { transform: translate(0, 0); }
+            to { transform: translate(55px, 45px); }
         }
 
         .logout-box {
             width: 100%;
-            max-width: 430px;
-            background: white;
-            padding: 40px 30px;
-            border-radius: 18px;
+            max-width: 475px;
+            padding: 42px 34px;
             text-align: center;
-            box-shadow: 0 10px 35px rgba(0, 60, 70, 0.15);
+            border: 1px solid rgba(190,255,245,.24);
+            border-radius: 26px;
+            background: rgba(8,37,46,.8);
+            box-shadow:
+                0 28px 85px rgba(0,0,0,.35),
+                inset 0 1px 0 rgba(255,255,255,.08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            position: relative;
+            z-index: 1;
+            animation: appear .7s ease-out both;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .brand {
+            color: #91f7e5;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            margin-bottom: 26px;
         }
 
         .icon {
-            width: 75px;
-            height: 75px;
-            margin: 0 auto 20px;
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 25px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: #e8f5e9;
-            color: #218838;
-            border-radius: 50%;
-            font-size: 38px;
+            align-items: center;
+            border-radius: 27px;
+            color: #073c3b;
+            font-size: 43px;
+            font-weight: 800;
+            background: linear-gradient(145deg, #b4fff2, #27d6bc 55%, #087e96);
+            box-shadow:
+                0 12px 35px rgba(35,201,176,.24),
+                inset 0 2px 8px rgba(255,255,255,.6);
+            transform: rotate(-5deg);
         }
 
         h1 {
-            color: #087e8b;
-            margin-bottom: 12px;
+            color: #f2fffd;
+            font-size: 30px;
+            margin: 0 0 14px;
         }
 
-        p {
-            color: #667085;
-            line-height: 1.6;
+        .message {
+            color: #b5d0d5;
+            font-size: 14px;
+            line-height: 1.9;
+            margin: 0 auto;
+            max-width: 340px;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,.1);
+            margin: 28px 0 22px;
+        }
+
+        .question {
+            color: #d9efef;
+            font-size: 13px;
+            margin-bottom: 18px;
         }
 
         .login-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 13px 28px;
-            background: #087e8b;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px 24px;
+            background: linear-gradient(110deg, #087e83, #22c9ae);
             color: white;
             text-decoration: none;
-            font-weight: bold;
-            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 12px;
+            box-shadow: 0 9px 25px rgba(15,162,146,.22);
+            transition: transform .2s, box-shadow .2s;
         }
 
         .login-btn:hover {
-            background: #066570;
+            transform: translateY(-2px);
+            box-shadow: 0 13px 30px rgba(15,162,146,.32);
+        }
+
+        .footer-note {
+            color: #789ba3;
+            font-size: 11px;
+            line-height: 1.8;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 15px;
+            }
+
+            .logout-box {
+                padding: 32px 22px;
+                border-radius: 21px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .icon {
+                width: 76px;
+                height: 76px;
+                font-size: 37px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="logout-box">
-        <div class="icon">✓</div>
+
+    <div class="water-background" aria-hidden="true">
+        <div class="glow glow-one"></div>
+        <div class="glow glow-two"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <main class="logout-box">
+        <div class="brand">WATERWISE</div>
+
+        <div class="icon" aria-hidden="true">✓</div>
 
         <h1>You Have Logged Out</h1>
 
-        <p>
+        <p class="message">
             You have successfully logged out of your WaterWise account.
-            Thank you for visiting!
+            Thank you for visiting and exploring smarter water consumption
+            insights. We hope to see you again soon.
         </p>
 
-        <a href="/login" class="login-btn">Login Again</a>
-    </div>
+        <div class="divider"></div>
+
+        <p class="question">Ready to continue exploring water insights?</p>
+
+        <a href="/login" class="login-btn">
+            Login Again <span aria-hidden="true">→</span>
+        </a>
+
+        <div class="footer-note">
+            WaterWise · Water Consumption and Usage Forecasting
+            <br>
+            Thank you for being part of our journey.
+        </div>
+    </main>
+
 </body>
 </html>

@@ -151,7 +151,11 @@ async def require_login(request: Request, call_next):
 async def home(request: Request):
     if request.session.get("user"):
         return RedirectResponse("/dashboard", status_code=303)
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(
+    request=request,
+    name="index.html",
+    context={}
+)
 
 
 @app.get("/login", response_class=HTMLResponse)

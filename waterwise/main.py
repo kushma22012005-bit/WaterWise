@@ -42,9 +42,15 @@ app.mount(
 
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
+
+# Only these pages can be opened without logging in.
 PUBLIC_PATHS = {
-    "/", "/login", "/signup", "/logout",
-    "/logout-page", "/favicon.ico"
+    "/",
+    "/login",
+    "/signup",
+    "/logout",
+    "/logout-page",
+    "/favicon.ico",
 }
 
 
@@ -206,19 +212,43 @@ def predict_consumption(date, time, temperature, rain, sun):
 
 
 # --------------------------------------------------
-# SESSION AND LOGIN PROTECTION
+# SESSION COOKIE CONFIGURATION
+# --------------------------------------------------
+
+# max_age=None creates a browser-session cookie.
+# Keep WATERWISE_SECRET_KEY configured on Render.
+# Do not publish or share your production secret key.
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=(
+        os.environ.get("WATERWISE_SECRET_KEY")
+        or "waterwise-local-development-key"
+    ),
+    max_age=None,
+    same_site="lax",
+    https_only=(
+        os.environ.get("WATERWISE_HTTPS_ONLY", "true").lower()
+        == "true"
+    )
+)
+
+
+# --------------------------------------------------
+# LOGIN PROTECTION
 # --------------------------------------------------
 
 @app.middleware("http")
 async def require_login(request: Request, call_next):
     path = request.url.path
 
+    # Allow login, signup, logout confirmation, and static files.
     if (
         path in PUBLIC_PATHS
         or path.startswith("/static/")
     ):
         return await call_next(request)
 
+    # Protect all other pages and APIs.
     if not request.session.get("user"):
         return RedirectResponse(
             url="/login",
@@ -226,22 +256,6 @@ async def require_login(request: Request, call_next):
         )
 
     return await call_next(request)
-
-
-# Keep WATERWISE_SECRET_KEY configured on Render.
-# The fallback is only for local development.
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=(
-        os.environ.get("WATERWISE_SECRET_KEY")
-        or "waterwise-local-development-key"
-    ),
-    same_site="lax",
-    https_only=(
-        os.environ.get("WATERWISE_HTTPS_ONLY", "true").lower()
-        == "true"
-    )
-)
 
 
 # --------------------------------------------------
@@ -333,6 +347,7 @@ async def login_user(
             status_code=401
         )
 
+    # Remove any old session information before logging in.
     request.session.clear()
 
     request.session["user"] = {
@@ -467,7 +482,6 @@ async def signup_user(
 
 @app.get("/logout-page", response_class=HTMLResponse)
 async def logout_page(request: Request):
-    # The session has already been cleared before this page is opened.
     return templates.TemplateResponse(
         request=request,
         name="logout.html",
@@ -477,10 +491,8 @@ async def logout_page(request: Request):
 
 @app.post("/logout")
 async def logout_post(request: Request):
-    # Clear all session data.
     request.session.clear()
 
-    # Redirect to the logout confirmation page.
     return RedirectResponse(
         url="/logout-page",
         status_code=303
@@ -489,7 +501,7 @@ async def logout_post(request: Request):
 
 @app.get("/logout")
 async def logout_get(request: Request):
-    # Support navigation links using href="/logout".
+    # Supports navigation links that use href="/logout".
     request.session.clear()
 
     return RedirectResponse(

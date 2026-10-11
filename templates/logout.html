@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out | WaterWise</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #e8f5e9, #dbeafe);
+        }
+
+        .logout-box {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(0, 60, 70, 0.15);
+        }
+
+        .icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f5e9;
+            color: #218838;
+            border-radius: 50%;
+            font-size: 38px;
+        }
+
+        h1 {
+            color: #087e8b;
+            margin-bottom: 12px;
+        }
+
+        p {
+            color: #667085;
+            line-height: 1.6;
+        }
+
+        .login-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 13px 28px;
+            background: #087e8b;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 9px;
+        }
+
+        .login-btn:hover {
+            background: #066570;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logout-box">
+        <div class="icon">✓</div>
+
+        <h1>You Have Logged Out</h1>
+
+        <p>
+            You have successfully logged out of your WaterWise account.
+            Thank you for visiting!
+        </p>
+
+        <a href="/login" class="login-btn">Login Again</a>
+    </div>
+</body>
+</html>

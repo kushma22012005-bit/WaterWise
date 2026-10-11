@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Performance | WaterWise</title>
+    <link rel="stylesheet" href="/static/css.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/" class="brand">
+        <span class="brand-icon">◉</span> WaterWise
+    </a>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/predict">Predict</a>
+        <a class="active" href="/performance">Performance</a>
+        <a href="/dataset">Dataset</a>
+        <a href="/about">About</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <div class="section-heading">
+        <span class="eyebrow">MODEL EVALUATION</span>
+        <h1>Model Performance</h1>
+        <p>
+            Evaluate how accurately the WaterWise model predicts
+            water consumption using unseen test data.
+        </p>
+    </div>
+
+    <div id="performance-status" class="notice" role="status"
+         aria-live="polite">
+        Loading model evaluation results...
+    </div>
+
+    <section class="grid">
+
+        <article class="card">
+            <h3>MAE</h3>
+            <div class="metric" id="mae">—</div>
+            <p class="muted">Mean Absolute Error</p>
+        </article>
+
+        <article class="card">
+            <h3>RMSE</h3>
+            <div class="metric" id="rmse">—</div>
+            <p class="muted">Root Mean Squared Error</p>
+        </article>
+
+        <article class="card">
+            <h3>R² Score</h3>
+            <div class="metric" id="r2">—</div>
+            <p class="muted">Coefficient of Determination</p>
+        </article>
+
+    </section>
+
+    <section class="panel">
+        <h2>Understanding the Results</h2>
+
+        <p class="muted" style="margin-top: 12px;">
+            <strong>MAE:</strong> Shows the average absolute difference
+            between actual and predicted consumption.
+        </p>
+
+        <p class="muted">
+            <strong>RMSE:</strong> Measures prediction error and gives
+            greater weight to larger errors.
+        </p>
+
+        <p class="muted">
+            <strong>R² Score:</strong> Indicates how well the model
+            explains variation in the test data. A value closer to 1
+            generally indicates a better fit.
+        </p>
+
+        <p class="muted">
+            MAE and RMSE use the same units as the consumption target.
+            The R² score can be negative when the model performs worse
+            than a simple mean-based prediction.
+        </p>
+    </section>
+
+    <section class="panel">
+        <h2>Evaluation Method</h2>
+
+        <p class="muted" style="margin-top: 12px;">
+            WaterWise uses a Random Forest Regression model. Its
+            performance is evaluated on a chronological test set
+            that is kept separate from the training data.
+        </p>
+
+        <p class="muted">
+            The metrics displayed above should come from the actual
+            evaluation results produced by the backend, not manually
+            entered or estimated values.
+        </p>
+    </section>
+
+</main>
+
+<footer class="footer">
+    WaterWise · Water Consumption Forecasting
+</footer>
+
+<script src="/static/script.js"></script>
+
+</body>
+</html>

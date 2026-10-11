@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataset Explorer | WaterWise</title>
+    <link rel="stylesheet" href="/static/css.css">
+</head>
+<body>
+<nav class="navbar">
+    <a href="/" class="brand"><span class="brand-icon">◉</span> WaterWise</a>
+    <div class="nav-links">
+        <a href="/">Home</a><a href="/dashboard">Dashboard</a>
+        <a href="/predict">Predict</a><a href="/performance">Performance</a>
+        <a class="active" href="/dataset">Dataset</a>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="section-heading">
+        <span class="eyebrow">DATA EXPLORATION</span>
+        <h1>Dataset Explorer</h1>
+        <p>Inspect historical records used in the project.</p>
+    </div>
+
+    <section class="panel">
+        <div class="field">
+            <label for="dataset-search">Search records</label>
+            <input id="dataset-search" type="search"
+                   placeholder="Search any displayed value…">
+        </div>
+
+        <div id="dataset-status" class="muted" style="margin-top:15px">
+            Loading records…
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead id="dataset-head"></thead>
+                <tbody id="dataset-body"></tbody>
+            </table>
+        </div>
+        <div class="actions">
+            <button class="button" id="previous-page" type="button">← Previous</button>
+            <span id="page-number" class="muted"></span>
+            <button class="button" id="next-page" type="button">Next →</button>
+        </div>
+    </section>
+</main>
+<footer class="footer">WaterWise · Dataset exploration</footer>
+<script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | WaterWise</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef7f6;
+            color: #183b43;
+            line-height: 1.7;
+        }
+
+        nav {
+            background: #103f46;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #8ee0d0;
+        }
+
+        .hero {
+            padding: 65px 8%;
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, #103f46, #168b83);
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: auto;
+            color: #e0f6f1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 35px 20px;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 25px;
+            padding: 28px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px #173f4310;
+            border: 1px solid #dcece8;
+        }
+
+        h2 {
+            color: #11766f;
+            margin-bottom: 12px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: #f1faf7;
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid #d4ebe4;
+        }
+
+        .card h3 {
+            color: #126c68;
+            margin-bottom: 8px;
+        }
+
+        .steps {
+            padding-left: 23px;
+        }
+
+        .steps li {
+            margin-bottom: 10px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #d9f2e9;
+            color: #145e57;
+            padding: 7px 13px;
+            border-radius: 20px;
+            margin: 5px 5px 5px 0;
+            font-size: 14px;
+        }
+
+        .cta {
+            text-align: center;
+            background: #dff3ee;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #11766f;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background: #0b5551;
+        }
+
+        footer {
+            background: #103f46;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            nav a {
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">💧 WaterWise</div>
+
+        <div>
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/predict">Forecast</a>
+            <a href="/performance">Performance</a>
+            <a href="/dataset">Dataset</a>
+            <a href="/about">About</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>About WaterWise</h1>
+        <p>
+            Understanding water consumption through data analytics
+            and forecasting to support smarter and more responsible
+            water usage.
+        </p>
+    </section>
+
+    <main class="container">
+
+        <section class="section">
+            <h2>What is WaterWise?</h2>
+            <p>
+                WaterWise is a water consumption analysis and forecasting
+                project developed to understand historical water usage
+                patterns and estimate future consumption. It combines
+                data preprocessing, visualization, statistical evaluation
+                and machine learning to make water consumption data easier
+                to understand.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>Problem Statement</h2>
+            <p>
+                Water consumption changes over time due to factors such as
+                temperature, rainfall, sunlight and daily usage patterns.
+                Without proper analysis, it can be difficult to identify
+                consumption trends and anticipate future demand.
+                WaterWise addresses this problem by analyzing historical
+                records and presenting useful information through a
+                simple web interface.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>Project Objectives</h2>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>01. Analyze Data</h3>
+                    <p>Study historical water consumption and identify usage patterns.</p>
+                </div>
+
+                <div class="card">
+                    <h3>02. Visualize Trends</h3>
+                    <p>Present important consumption statistics in an understandable format.</p>
+                </div>
+
+                <div class="card">
+                    <h3>03. Forecast Usage</h3>
+                    <p>Estimate water consumption using the trained forecasting model.</p>
+                </div>
+
+                <div class="card">
+                    <h3>04. Evaluate Results</h3>
+                    <p>Use model evaluation metrics to understand prediction performance.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>How WaterWise Works</h2>
+
+            <ol class="steps">
+                <li><strong>Data Collection:</strong> Load the historical water consumption dataset.</li>
+                <li><strong>Data Preprocessing:</strong> prepare dates, handle missing values and create useful time-based features.</li>
+                <li><strong>Exploratory Analysis:</strong> inspect consumption patterns and visualize the data.</li>
+                <li><strong>Model Training:</strong> train the forecasting model using historical records.</li>
+                <li><strong>Performance Evaluation:</strong> evaluate predictions using MAE, RMSE and R² where available.</li>
+                <li><strong>Forecasting:</strong> estimate consumption for selected input conditions.</li>
+                <li><strong>Web Presentation:</strong> display information through the WaterWise website.</li>
+            </ol>
+        </section>
+
+        <section class="section">
+            <h2>Dataset Information</h2>
+            <p>
+                The project dataset contains historical water consumption
+                observations along with date, time and environmental
+                information.
+            </p>
+
+            <div style="margin-top: 15px;">
+                <span class="tag">Date</span>
+                <span class="tag">Time</span>
+                <span class="tag">Consumption</span>
+                <span class="tag">Temperature</span>
+                <span class="tag">Rain</span>
+                <span class="tag">Sun</span>
+            </div>
+
+            <p style="margin-top: 15px;">
+                These variables help the project explore changes in
+                consumption over time and examine the relationship
+                between weather conditions and water usage.
+            </p>
+        </section>
+
+        <section class="section">
+            <h2>Technology Stack</h2>
+
+            <div class="cards">
+                <div class="card">
+                    <h3>Python</h3>
+                    <p>Data processing, model training and forecasting logic.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Pandas</h3>
+                    <p>Dataset loading, cleaning and transformation.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Scikit-learn</h3>
+                    <p>Machine learning model development and evaluation.</p>
+                </div>
+
+                <div class="card">
+                    <h3>FastAPI</h3>
+                    <p>Backend routes that connect the website with the Python code.</p>
+                </div>
+
+                <div class="card">
+                    <h3>HTML & CSS</h3>
+                    <p>Website structure, layout and visual styling.</p>
+                </div>
+
+                <div class="card">
+                    <h3>JavaScript</h3>
+                    <p>Interactive website features and API communication.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Key Features</h2>
+            <ul class="steps">
+                <li>Water consumption overview and summary statistics.</li>
+                <li>Historical consumption trend analysis.</li>
+                <li>Consumption prediction based on user inputs.</li>
+                <li>Model performance evaluation.</li>
+                <li>Dataset preview and information.</li>
+                <li>A simple, accessible interface for exploring results.</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>Project Scope and Limitations</h2>
+            <p>
+                WaterWise provides data-driven estimates based on the
+                available dataset and trained model. Predictions are
+                estimates, not guaranteed future consumption values.
+                Their reliability depends on data quality, the variables
+                available and how well the historical patterns represent
+                future conditions.
+            </p>
+        </section>
+
+        <section class="section cta">
+            <h2>Explore WaterWise</h2>
+            <p>
+                Visit the dashboard to explore water consumption data
+                or use the forecasting page to estimate consumption.
+            </p>
+
+            <a href="/dashboard" class="btn">View Dashboard</a>
+            <a href="/predict" class="btn">Try Forecasting</a>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>WaterWise | Water Consumption Analysis and Forecasting</p>
+        <p>Data-driven insights for smarter water usage.</p>
+    </footer>
+
+</body>
+</html>

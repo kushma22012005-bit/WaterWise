@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | WaterWise</title>
+    <link rel="stylesheet" href="/static/css.css">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+    <a href="/" class="brand"><span class="brand-icon">◉</span> WaterWise</a>
+    <div class="nav-links">
+        <a href="/">Home</a><a class="active" href="/dashboard">Dashboard</a>
+        <a href="/predict">Predict</a><a href="/performance">Performance</a>
+        <a href="/dataset">Dataset</a>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="section-heading">
+        <span class="eyebrow">OVERVIEW</span>
+        <h1>Water Consumption Dashboard</h1>
+        <p>Explore the dataset and discover historical usage patterns.</p>
+    </div>
+
+    <div id="dashboard-status" class="notice">Loading dataset statistics…</div>
+
+    <section class="grid">
+        <article class="card">
+            <p class="muted">Total Records</p>
+            <div class="metric" id="total-records">—</div>
+        </article>
+        <article class="card">
+            <p class="muted">Average Consumption</p>
+            <div class="metric" id="average-consumption">—</div>
+        </article>
+        <article class="card">
+            <p class="muted">Highest Consumption</p>
+            <div class="metric" id="maximum-consumption">—</div>
+        </article>
+    </section>
+
+    <section class="panel">
+        <h2>Historical Consumption Trend</h2>
+        <p class="muted">Daily totals calculated from the available dataset.</p>
+        <div id="consumption-chart" style="width:100%;height:390px"></div>
+    </section>
+</main>
+
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+<footer class="footer">WaterWise · Data-driven water insights</footer>
+<script src="/static/script.js"></script>
+</body>
+</html>

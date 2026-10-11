@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | WaterWise</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #e8f5e9, #dbeafe);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .signup-box {
+            background: white;
+            width: 100%;
+            max-width: 440px;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0, 60, 70, 0.15);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 35px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #087e8b;
+            margin: 5px 0 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #667085;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #344054;
+            margin: 15px 0 7px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0d5dd;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #0891a2;
+            box-shadow: 0 0 0 3px rgba(8, 145, 162, 0.12);
+        }
+
+        .create-btn {
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px;
+            background: #087e8b;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .create-btn:hover {
+            background: #066570;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #b42318;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #667085;
+            font-size: 14px;
+        }
+
+        a {
+            color: #087e8b;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-box">
+        <div class="logo">💧</div>
+
+        <h1>Create Account</h1>
+        <p class="subtitle">Join WaterWise and explore your water usage.</p>
+
+        {% if error %}
+            <div class="message error" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <form action="/signup" method="post" id="signup-form">
+            <label for="name">Full Name</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Create a password (minimum 8 characters)"
+                minlength="8"
+                autocomplete="new-password"
+                required
+            >
+
+            <label for="confirm_password">Confirm Password</label>
+            <input
+                type="password"
+                id="confirm_password"
+                name="confirm_password"
+                placeholder="Enter your password again"
+                minlength="8"
+                autocomplete="new-password"
+                required
+            >
+
+            <button type="submit" class="create-btn">
+                Create Account
+            </button>
+        </form>
+
+        <p class="login-link">
+            Already have an account?
+            <a href="/login">Login here</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function(event) {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password").value;
+
+            if (password.length < 8) {
+                event.preventDefault();
+                alert("Password must contain at least 8 characters.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert("Passwords do not match. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>

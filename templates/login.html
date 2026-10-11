@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | WaterWise</title>
+    <link rel="stylesheet" href="/static/css.css">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f7f3, #dce9fa);
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 36px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px #163f4d1c;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 36px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #087e83;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin: 17px 0 8px;
+            font-weight: 600;
+            color: #243746;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 2px solid #8bd4d1;
+            border-color: #087e83;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            border: none;
+            border-radius: 8px;
+            background: #087e83;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover { background: #06666b; }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .error {
+            color: #a61b1b;
+            background: #fff0f0;
+            border: 1px solid #fecaca;
+        }
+
+        .success {
+            color: #067647;
+            background: #ecfdf3;
+            border: 1px solid #abefc6;
+        }
+
+        .links {
+            margin-top: 22px;
+            text-align: center;
+            color: #64748b;
+            line-height: 1.9;
+            font-size: 14px;
+        }
+
+        a {
+            color: #087e83;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        .back {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+            color: #64748b;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <main class="auth-card">
+        <div class="logo">💧</div>
+        <h1>Welcome Back</h1>
+        <p class="subtitle">
+            Sign in to your WaterWise account to continue.
+        </p>
+
+        {% if error %}
+        <div class="message error" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if registered %}
+        <div class="message success" role="status">
+            Account created successfully! Please log in.
+        </div>
+        {% endif %}
+
+        <form action="/login" method="post">
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="links">
+            Don't have an account?
+            <a href="/signup">Create a new account</a>
+        </div>
+
+        <a class="back" href="/">← Back to Home</a>
+    </main>
+</body>
+</html>

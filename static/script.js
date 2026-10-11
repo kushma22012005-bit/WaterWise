@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     loadPerformance();
     loadSummary();
@@ -21,111 +22,161 @@ async function loadPerformance() {
         const response = await fetch("/api/performance");
 
         if (!response.ok) {
-            throw new Error("Performance API is not available.");
+            throw new Error("Performance API returned status " + response.status);
         }
 
         const data = await response.json();
 
-        document.getElementById("mae").textContent =
-            formatNumber(data.mae);
-
-        document.getElementById("rmse").textContent =
-            formatNumber(data.rmse);
-
-        document.getElementById("r2").textContent =
-            formatNumber(data.r2);
+        setText("mae", formatNumber(data.mae));
+        setText("rmse", formatNumber(data.rmse));
+        setText("r2", formatNumber(data.r2));
 
         if (status) {
             status.textContent = "Model evaluation results loaded successfully.";
         }
     } catch (error) {
+        console.error("Performance loading error:", error);
+
         if (status) {
             status.textContent =
-                "Unable to load model metrics. Please check the FastAPI backend and /api/performance endpoint.";
+                "Unable to load model metrics. Please try again later.";
         }
-
-        console.error("Performance loading error:", error);
     }
 }
-
 
 /* ---------------------------------
    2. DASHBOARD SUMMARY
 --------------------------------- */
 
 async function loadSummary() {
+    const status = document.getElementById("dashboard-status");
+
     try {
         const response = await fetch("/api/summary");
 
         if (!response.ok) {
-            throw new Error("Could not load summary.");
+            throw new Error("Summary API returned status " + response.status);
         }
 
         const data = await response.json();
 
-        setText("total-records", data.total_records);
-        setText(
-            "average-consumption",
-            formatNumber(data.average_consumption)
-        );
-        setText(
-            "maximum-consumption",
-            formatNumber(data.maximum_consumption)
-        );
+        setText("total-records", formatNumber(data.total_records));
+        setText("average-consumption", formatNumber(data.average_consumption));
+        setText("maximum-consumption", formatNumber(data.maximum_consumption));
+
+        if (status) {
+            status.textContent = "Dataset statistics loaded successfully.";
+        }
     } catch (error) {
         console.error("Summary loading error:", error);
+
+        if (status) {
+            status.textContent =
+                "Unable to load dataset statistics. Please refresh and try again.";
+        }
     }
 }
 
-
 /* ---------------------------------
-   3. HISTORICAL TREND
+   3. HISTORICAL CONSUMPTION TREND
 --------------------------------- */
 
 async function loadTrend() {
+    const chart = document.getElementById("consumption-chart");
+
+    if (!chart) {
+        return;
+    }
+
     try {
         const response = await fetch("/api/trend");
 
         if (!response.ok) {
-            throw new Error("Could not load historical trend.");
+            throw new Error("Trend API returned status " + response.status);
         }
 
         const data = await response.json();
 
-        /*
-          If your dashboard has an element with ID "trend-data",
-          display the latest daily values as text.
-          This does not replace a chart library if you already use one.
-        */
+        if (
+            !Array.isArray(data.dates) ||
+            !Array.isArray(data.consumption) ||
+            data.dates.length === 0 ||
+            data.dates.length !== data.consumption.length
+        ) {
+            chart.textContent = "No valid historical trend data is available.";
+            return;
+        }
 
-        const trendElement = document.getElementById("trend-data");
+        if (typeof window.Plotly === "undefined") {
+            chart.textContent =
+                "The chart library could not load. Please refresh the page.";
+            return;
+        }
 
-        if (trendElement && data.dates && data.values) {
-            if (data.dates.length === 0) {
-                trendElement.textContent =
-                    "No historical trend data is available.";
-                return;
+        await window.Plotly.newPlot(
+            chart,
+            [
+                {
+                    x: data.dates,
+                    y: data.consumption,
+                    type: "scatter",
+                    mode: "lines",
+                    name: "Water Consumption",
+                    line: {
+                        color: "#078f87",
+                        width: 2
+                    },
+                    fill: "tozeroy",
+                    fillcolor: "rgba(7, 143, 135, 0.10)",
+                    hovertemplate:
+                        "Date: %{x|%d %b %Y}<br>" +
+                        "Consumption: %{y:,.2f}<extra></extra>"
+                }
+            ],
+            {
+                title: {
+                    text: "Daily Water Consumption",
+                    font: {
+                        size: 18
+                    }
+                },
+                xaxis: {
+                    title: "Date",
+                    type: "date",
+                    gridcolor: "#e5eeee"
+                },
+                yaxis: {
+                    title: "Consumption",
+                    gridcolor: "#e5eeee",
+                    zeroline: false
+                },
+                paper_bgcolor: "rgba(0,0,0,0)",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                font: {
+                    family: "Arial, sans-serif",
+                    color: "#36545a"
+                },
+                margin: {
+                    l: 70,
+                    r: 25,
+                    t: 60,
+                    b: 65
+                },
+                autosize: true
+            },
+            {
+                responsive: true,
+                displaylogo: false,
+                modeBarButtonsToRemove: ["lasso2d", "select2d"]
             }
-
-            trendElement.textContent =
-                "Latest available date: " +
-                data.dates[data.dates.length - 1] +
-                " | Daily consumption: " +
-                formatNumber(data.values[data.values.length - 1]);
-        }
-
-        /*
-          If your existing dashboard uses a chart, use the data
-          arrays data.dates and data.values with that chart.
-        */
-        if (typeof window.updateConsumptionChart === "function") {
-            window.updateConsumptionChart(data.dates, data.values);
-        }
+        );
     } catch (error) {
         console.error("Trend loading error:", error);
+
+        chart.textContent =
+            "Unable to load the historical consumption chart. Please try again.";
     }
 }
-
 
 /* ---------------------------------
    4. DATASET PREVIEW
@@ -142,10 +193,14 @@ async function loadDataset() {
         const response = await fetch("/api/dataset");
 
         if (!response.ok) {
-            throw new Error("Could not load dataset.");
+            throw new Error("Dataset API returned status " + response.status);
         }
 
         const data = await response.json();
+
+        if (!Array.isArray(data.rows)) {
+            throw new Error("The dataset response does not contain a rows array.");
+        }
 
         tableBody.replaceChildren();
 
@@ -163,17 +218,21 @@ async function loadDataset() {
     } catch (error) {
         console.error("Dataset loading error:", error);
 
-        tableBody.textContent = "";
+        tableBody.replaceChildren();
 
         const tr = document.createElement("tr");
         const td = document.createElement("td");
 
         td.textContent = "Unable to load dataset records.";
+        td.colSpan = Math.max(
+            1,
+            document.querySelectorAll("#dataset-table thead th").length
+        );
+
         tr.appendChild(td);
         tableBody.appendChild(tr);
     }
 }
-
 
 /* ---------------------------------
    5. WATER CONSUMPTION PREDICTION
@@ -192,9 +251,8 @@ function setupPredictionForm() {
         const status = document.getElementById("prediction-status");
         const resultBox = document.getElementById("prediction-result");
         const predictedValue = document.getElementById("predicted-value");
-        const submitButton = form.querySelector(
-            'button[type="submit"]'
-        );
+
+        const submitButton = form.querySelector('button[type="submit"]');
 
         if (status) {
             status.textContent = "Generating prediction...";
@@ -247,11 +305,11 @@ function setupPredictionForm() {
                 status.textContent = "Prediction generated successfully.";
             }
         } catch (error) {
+            console.error("Prediction error:", error);
+
             if (status) {
                 status.textContent = error.message;
             }
-
-            console.error("Prediction error:", error);
         } finally {
             if (submitButton) {
                 submitButton.disabled = false;
@@ -259,7 +317,6 @@ function setupPredictionForm() {
         }
     });
 }
-
 
 /* ---------------------------------
    6. SHARED HELPER FUNCTIONS

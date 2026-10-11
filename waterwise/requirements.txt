@@ -1,4 +1,4 @@
-
+itsdangerous
 fastapi
 uvicorn[standard]
 jinja2
